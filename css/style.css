@@ -41,14 +41,31 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 
 /* ============ HERO ============ */
 .hero {
-  background: linear-gradient(160deg, #e8002e 0%, #f50030 25%, #ff1a40 50%, #ff5500 80%, #ff8800 100%);
-  background-size: 300% 300%;
-  animation: energyShift 8s ease infinite;
+  background-color: #e8002e;
   color: var(--white);
   padding: 36px 16px 0;
   text-align: center;
   position: relative;
   overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('https://images.unsplash.com/photo-1554068865-24cecd4e34d8?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+  opacity: 0.25;
+  mix-blend-mode: overlay;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(232,0,46,0.85) 0%, rgba(245,0,48,0.8) 25%, rgba(255,26,64,0.7) 50%, rgba(255,85,0,0.8) 80%, rgba(255,136,0,0.85) 100%);
+  background-size: 300% 300%;
+  animation: energyShift 8s ease infinite;
+  z-index: 0;
 }
 
 @keyframes energyShift {
@@ -63,6 +80,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   inset: 0;
   pointer-events: none;
   overflow: hidden;
+  z-index: 1;
 }
 
 .particle {
