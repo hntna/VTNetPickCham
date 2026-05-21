@@ -7,10 +7,10 @@
   --neon-red: #FF0040;
   --neon-orange: #FF6B00;
   --neon-gold: #FFD700;
-  --energy-dark: #0f0f1e;
-  --energy-mid: #1a0a2e;
-  --surface-card: #1c1c35;
-  --surface-light: #22223a;
+  --energy-dark: #f5f3ff;
+  --energy-mid: #fdf2f8;
+  --surface-card: #ffffff;
+  --surface-light: #f8fafc;
   --white: #FFFFFF;
   --gray-50: #F9FAFB; --gray-100: #F2F4F7; --gray-200: #E5E7EB;
   --gray-300: #D1D5DB; --gray-400: #9CA3AF; --gray-500: #6B7280;
@@ -20,8 +20,8 @@
   --blue: #3B82F6; --blue-light: #DBEAFE;
   --purple: #8B5CF6; --purple-light: #EDE9FE;
   --radius: 12px; --radius-lg: 16px; --radius-xl: 24px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.25);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.4);
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.15);
   --shadow-glow: 0 0 30px rgba(238,0,51,0.3);
   --ease: cubic-bezier(0.4,0,0.2,1);
 }
@@ -30,8 +30,8 @@
 
 body {
   font-family:'Sarabun','Segoe UI',sans-serif;
-  background: var(--energy-dark);
-  color: #e2e2f0;
+  background: linear-gradient(160deg, #fff5f8 0%, #f8f3ff 40%, #f0f8ff 100%);
+  color: var(--gray-800);
   min-height:100vh;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
@@ -225,15 +225,18 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   height: 50px;
 }
 
+/* override wave fill to match light body */
+.hero__wave path { fill: #fff5f8; }
+
 /* ============ MAIN TABS ============ */
 .main-tabs {
   display: flex;
-  background: var(--energy-dark);
+  background: var(--white);
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  border-bottom: 1px solid var(--gray-200);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
 }
 
 .main-tab {
@@ -243,7 +246,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   font-family: 'Be Vietnam Pro', sans-serif;
   font-weight: 700;
   font-size: 14px;
-  color: rgba(255,255,255,0.4);
+  color: var(--gray-400);
   background: none;
   border: none;
   cursor: pointer;
@@ -277,14 +280,14 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 }
 
 .main-tab.active {
-  color: var(--white);
+  color: var(--primary);
 }
 
 .main-tab.active::before { opacity: 1; }
 .main-tab.active::after  { width: 70%; }
 
 .main-tab:hover:not(.active) {
-  color: rgba(255,255,255,0.7);
+  color: var(--gray-600);
 }
 
 /* Ripple */
@@ -341,17 +344,17 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .group-card {
   --gcard-color: var(--primary);
   --gcard-dark: var(--primary-dark);
-  background: var(--surface-card);
+  background: var(--white);
   border-radius: var(--radius-xl);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .group-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 20px rgba(var(--gcard-color), 0.2), 0 0 0 1px rgba(255,255,255,0.1);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.06);
 }
 
 .group-card__header {
@@ -419,15 +422,15 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 }
 
 .standings th {
-  background: rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, var(--gray-50), var(--gray-100));
   padding: 10px 8px;
   font-weight: 800;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: .8px;
-  color: rgba(255,255,255,0.4);
+  color: var(--gray-500);
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 2px solid var(--gray-200);
 }
 
 .standings th:nth-child(2) { text-align: left; }
@@ -435,8 +438,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .standings td {
   padding: 10px 8px;
   text-align: center;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  color: #d0d0e8;
+  border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-700);
   transition: all .25s;
 }
 
@@ -445,12 +448,12 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   font-weight: 600;
   font-size: 12px;
   max-width: 180px;
-  color: #e8e8f8;
+  color: var(--gray-800);
 }
 
 .standings tr:last-child td { border-bottom: none; }
 
-.standings tr:hover td { background: rgba(255,255,255,0.04); }
+.standings tr:hover td { background: rgba(59,130,246,0.04); }
 
 .standings tr.qualified td {
   background: linear-gradient(90deg, rgba(16,185,129,0.15), rgba(16,185,129,0.04));
@@ -495,7 +498,7 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   padding: 12px 0;
   font-weight: 700;
   font-size: 13px;
-  color: rgba(255,100,50,0.9);
+  color: var(--primary);
   cursor: pointer;
   border: none;
   background: none;
@@ -516,20 +519,20 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   gap: 8px;
   padding: 10px 12px;
   margin-bottom: 6px;
-  background: rgba(255,255,255,0.04);
+  background: var(--gray-50);
   border-radius: var(--radius);
   font-size: 12px;
   transition: all .25s;
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1px solid transparent;
 }
 
 .match-item:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,100,50,0.3);
-  box-shadow: 0 2px 12px rgba(255,50,0,0.1);
+  background: var(--white);
+  border-color: var(--gray-200);
+  box-shadow: 0 2px 12px rgba(238,0,51,0.07);
 }
 
-.match-team { flex: 1; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #d0d0e8; }
+.match-team { flex: 1; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--gray-700); }
 .match-team.right { text-align: right; }
 
 .match-score {
@@ -547,21 +550,21 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   justify-content: center;
   width: 32px; height: 32px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.06);
-  border: 2px solid rgba(255,255,255,0.12);
-  color: #d0d0e8;
+  background: var(--white);
+  border: 2px solid var(--gray-200);
+  color: var(--gray-700);
 }
 
 .match-score .winner {
-  border-color: var(--neon-orange);
-  color: var(--neon-orange);
-  background: rgba(255,107,0,0.12);
-  box-shadow: 0 0 8px rgba(255,107,0,0.3);
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(238,0,51,0.06);
+  box-shadow: 0 0 8px rgba(238,0,51,0.2);
 }
 
 .match-score .vs {
   font-size: 10px;
-  color: rgba(255,255,255,0.3);
+  color: var(--gray-400);
   width: auto;
   border: none;
   background: none;
@@ -569,8 +572,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 }
 
 .match-score .pending {
-  border-color: rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.25);
+  border-color: var(--gray-200);
+  color: var(--gray-400);
   font-size: 12px;
 }
 
@@ -590,13 +593,12 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .ko-tabs {
   display: flex;
   gap: 4px;
-  background: rgba(255,255,255,0.05);
+  background: linear-gradient(180deg, var(--gray-100), var(--gray-200));
   border-radius: var(--radius);
   padding: 4px;
   margin-bottom: 20px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border: 1px solid rgba(255,255,255,0.07);
 }
 
 .ko-tab {
@@ -609,28 +611,28 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   font-family: 'Be Vietnam Pro', sans-serif;
   font-weight: 700;
   font-size: 12px;
-  color: rgba(255,255,255,0.4);
+  color: var(--gray-500);
   cursor: pointer;
   white-space: nowrap;
   transition: all .3s var(--ease);
 }
 
 .ko-tab.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: var(--white);
-  box-shadow: 0 2px 16px rgba(238,0,51,0.4);
+  background: var(--white);
+  color: var(--primary);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 
 /* ============ KO MATCH CARDS ============ */
 .ko-matches { display: grid; grid-template-columns: 1fr; gap: 14px; }
 
 .ko-match-card {
-  background: var(--surface-card);
+  background: var(--white);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: all .3s var(--ease);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .ko-match-card:hover {
@@ -675,34 +677,33 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   border-radius: var(--radius);
   margin-bottom: 4px;
   transition: all .25s;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid transparent;
 }
 
 .ko-team-row.winner-row {
-  background: linear-gradient(90deg, rgba(16,185,129,0.18), rgba(16,185,129,0.05));
+  background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(16,185,129,0.03));
   border-left: 3px solid var(--green);
-  border-color: rgba(16,185,129,0.3);
 }
 
-.ko-team-row.loser-row { opacity: .35; }
+.ko-team-row.loser-row { opacity: .45; }
 
 .ko-team-row.bye-row {
-  background: rgba(255,255,255,0.03);
-  border: 2px dashed rgba(255,255,255,0.1);
+  background: var(--gray-50);
+  border: 2px dashed var(--gray-300);
 }
 
-.ko-team-name { flex: 1; font-weight: 600; font-size: 13px; min-width: 0; color: #e0e0f0; }
-.ko-team-score { font-size: 24px; font-weight: 900; color: #d0d0e8; min-width: 36px; text-align: center; }
+.ko-team-name { flex: 1; font-weight: 600; font-size: 13px; min-width: 0; color: var(--gray-800); }
+.ko-team-score { font-size: 24px; font-weight: 900; color: var(--gray-800); min-width: 36px; text-align: center; }
 .ko-team-score.win-score {
-  color: var(--neon-orange);
-  text-shadow: 0 0 12px rgba(255,107,0,0.5);
+  color: var(--primary);
+  text-shadow: 0 1px 4px rgba(238,0,51,0.2);
 }
 
 .ko-vs {
   text-align: center;
   font-size: 11px;
   font-weight: 800;
-  color: rgba(255,255,255,0.25);
+  color: var(--gray-400);
   padding: 2px 0;
 }
 
@@ -784,19 +785,18 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .qualified-section {
   margin-top: 28px;
   padding: 22px;
-  background: var(--surface-card);
+  background: var(--white);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow);
-  border: 1px solid rgba(255,255,255,0.07);
+  border: 1px solid rgba(0,0,0,0.04);
 }
 
 .qualified-title {
   font-size: 15px;
   font-weight: 900;
-  color: var(--neon-orange);
+  color: var(--primary);
   margin-bottom: 16px;
   text-align: center;
-  text-shadow: 0 0 16px rgba(255,107,0,0.4);
 }
 
 .qualified-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
@@ -806,16 +806,17 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: rgba(255,255,255,0.04);
+  background: var(--gray-50);
   border-radius: var(--radius);
   font-size: 13px;
   transition: all .2s;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: #d0d0e8;
+  border: 1px solid transparent;
+  color: var(--gray-700);
 }
 
 .qualified-item:hover {
-  background: rgba(255,255,255,0.08);
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   transform: translateX(4px);
 }
 
@@ -823,8 +824,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .qualified-item.wildcard { border-left: 4px solid var(--gold); }
 
 .qualified-badge { font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
-.badge-direct   { background: rgba(16,185,129,0.2); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
-.badge-wildcard { background: rgba(245,158,11,0.2); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.badge-direct   { background: var(--green-light); color: #065F46; }
+.badge-wildcard { background: var(--gold-light);  color: #92400E; }
 
 /* ============ ANIMATIONS ============ */
 @keyframes scorePulse {
@@ -838,19 +839,19 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .loading {
   text-align: center;
   padding: 60px 20px;
-  color: rgba(255,255,255,0.4);
+  color: var(--gray-500);
   font-size: 14px;
 }
 
 .loading-spinner {
   width: 40px; height: 40px;
-  border: 3px solid rgba(255,255,255,0.08);
+  border: 3px solid var(--gray-200);
   border-top-color: var(--primary);
   border-right-color: var(--neon-orange);
   border-radius: 50%;
   animation: spin .75s linear infinite;
   margin: 0 auto 16px;
-  box-shadow: 0 0 16px rgba(238,0,51,0.25);
+  box-shadow: 0 0 16px rgba(238,0,51,0.15);
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -860,8 +861,8 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   text-align: center;
   padding: 32px 16px 28px;
   margin-top: 40px;
-  border-top: 1px solid rgba(255,255,255,0.07);
-  background: linear-gradient(180deg, transparent, rgba(238,0,51,0.04));
+  border-top: 1px solid var(--gray-200);
+  background: linear-gradient(180deg, transparent, rgba(238,0,51,0.03));
 }
 
 .footer__icon {
@@ -874,45 +875,45 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .footer__title {
   font-size: 13px;
   font-weight: 700;
-  color: rgba(255,255,255,0.5);
+  color: var(--gray-500);
   margin-bottom: 4px;
 }
 
 .footer__copy {
   font-size: 11px;
-  color: rgba(255,255,255,0.25);
+  color: var(--gray-400);
 }
 
 /* ============ ADMIN (unchanged look) ============ */
-.admin-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#0f0f1e 0%,#1a0a2e 50%,#1a1040 100%)}
-.login-card{width:100%;max-width:400px;background:var(--surface-card);border-radius:var(--radius-xl);padding:40px 28px;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,0.08)}
+.admin-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#f0f2f5 0%,#e2e8f0 50%,#ddd6fe 100%)}
+.login-card{width:100%;max-width:400px;background:var(--white);border-radius:var(--radius-xl);padding:40px 28px;box-shadow:var(--shadow-lg);border:1px solid rgba(0,0,0,0.04)}
 .login-card__title{text-align:center;font-size:24px;font-weight:900;color:var(--primary);margin-bottom:8px}
-.login-card__sub{text-align:center;color:rgba(255,255,255,0.45);font-size:14px;margin-bottom:28px}
+.login-card__sub{text-align:center;color:var(--gray-500);font-size:14px;margin-bottom:28px}
 .form-group{margin-bottom:16px}
-.form-label{display:block;font-weight:700;font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:6px}
-.form-input{width:100%;padding:12px 16px;border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius);font-family:inherit;font-size:15px;transition:all .2s;outline:none;background:rgba(255,255,255,0.05);color:var(--white)}
-.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(238,0,51,0.15)}
+.form-label{display:block;font-weight:700;font-size:13px;color:var(--gray-600);margin-bottom:6px}
+.form-input{width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius);font-family:inherit;font-size:15px;transition:all .2s;outline:none;background:var(--white);color:var(--gray-800)}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(238,0,51,0.1)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;border:none;border-radius:var(--radius);font-family:'Be Vietnam Pro',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .2s var(--ease);width:100%}
-.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:var(--white);box-shadow:0 4px 16px rgba(238,0,51,0.35)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(238,0,51,0.5)}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:var(--white);box-shadow:0 4px 16px rgba(238,0,51,0.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(238,0,51,0.35)}
 .btn-primary:active{transform:translateY(0)}
-.btn-outline{background:none;border:2px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6)}
+.btn-outline{background:none;border:2px solid var(--gray-300);color:var(--gray-600)}
 .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-.login-error{background:rgba(153,27,27,0.3);color:#fca5a5;padding:10px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;display:none;border:1px solid rgba(220,38,38,0.3)}
+.login-error{background:#FEF2F2;color:#991B1B;padding:10px 14px;border-radius:var(--radius);font-size:13px;margin-bottom:16px;display:none}
 .admin-dashboard{display:none}
-.admin-header{background:var(--surface-card);padding:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.3);position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.07)}
-.admin-user{font-weight:600;font-size:14px;color:rgba(255,255,255,0.8)}
+.admin-header{background:var(--white);padding:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 12px rgba(0,0,0,0.06);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--gray-200)}
+.admin-user{font-weight:600;font-size:14px;color:var(--gray-800)}
 .admin-content{padding:16px;max-width:600px;margin:0 auto}
-.admin-card{background:var(--surface-card);border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(255,255,255,0.07)}
-.admin-card__title{font-size:16px;font-weight:700;margin-bottom:16px;color:rgba(255,255,255,0.8)}
-.form-select{width:100%;padding:12px 16px;border:2px solid rgba(255,255,255,0.1);border-radius:var(--radius);font-family:inherit;font-size:14px;background:rgba(255,255,255,0.05);color:var(--white);outline:none;cursor:pointer}
+.admin-card{background:var(--white);border-radius:var(--radius-xl);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid rgba(0,0,0,0.04)}
+.admin-card__title{font-size:16px;font-weight:700;margin-bottom:16px;color:var(--gray-800)}
+.form-select{width:100%;padding:12px 16px;border:2px solid var(--gray-200);border-radius:var(--radius);font-family:inherit;font-size:14px;background:var(--white);color:var(--gray-800);outline:none;cursor:pointer}
 .form-select:focus{border-color:var(--primary)}
 .score-input-group{display:flex;align-items:center;gap:12px;justify-content:center;margin:20px 0}
-.score-team-label{flex:1;font-weight:600;font-size:13px;text-align:center;color:rgba(255,255,255,0.7)}
-.score-input{width:70px;height:60px;border:3px solid var(--primary);border-radius:var(--radius);text-align:center;font-size:28px;font-weight:900;color:var(--primary);outline:none;font-family:inherit;transition:all .2s;background:rgba(238,0,51,0.08)}
+.score-team-label{flex:1;font-weight:600;font-size:13px;text-align:center;color:var(--gray-700)}
+.score-input{width:70px;height:60px;border:3px solid var(--primary);border-radius:var(--radius);text-align:center;font-size:28px;font-weight:900;color:var(--primary);outline:none;font-family:inherit;transition:all .2s;background:rgba(238,0,51,0.04)}
 .score-input:focus{border-color:var(--gold);transform:scale(1.05);box-shadow:0 0 0 3px rgba(245,158,11,0.2)}
-.score-vs{font-size:18px;font-weight:900;color:rgba(255,255,255,0.3)}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface-light);color:var(--white);padding:14px 28px;border-radius:var(--radius);font-weight:700;font-size:14px;z-index:999;transition:transform .4s var(--ease);box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,0.1)}
+.score-vs{font-size:18px;font-weight:900;color:var(--gray-400)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--gray-800);color:var(--white);padding:14px 28px;border-radius:var(--radius);font-weight:700;font-size:14px;z-index:999;transition:transform .4s var(--ease);box-shadow:var(--shadow-lg)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .toast.success{background:linear-gradient(135deg,#065F46,#10B981)}
 .toast.error{background:linear-gradient(135deg,#991B1B,#DC2626)}
