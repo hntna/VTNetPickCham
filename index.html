@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=7">
 </head>
 <body>
 
@@ -34,37 +34,21 @@
     <div class="hero__content">
       <div class="hero__live-badge"><span class="live-dot"></span> LIVE</div>
       <div class="hero__icon">
-        <svg class="pickleball-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width: 52px; height: 52px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); animation: iconSpin 6s ease-in-out infinite;">
-          <defs>
-            <radialGradient id="ballGrad" cx="38%" cy="35%" r="60%">
-              <stop offset="0%" stop-color="#f5f542"/>
-              <stop offset="50%" stop-color="#d4e020"/>
-              <stop offset="100%" stop-color="#8fa800"/>
-            </radialGradient>
-            <radialGradient id="shinGrad" cx="35%" cy="30%" r="40%">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
-              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-            </radialGradient>
-          </defs>
-          <circle cx="50" cy="50" r="47" fill="url(#ballGrad)"/>
-          <circle cx="50" cy="22" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="66" cy="28" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="75" cy="42" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="75" cy="58" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="66" cy="72" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="50" cy="78" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="34" cy="72" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="25" cy="58" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="25" cy="42" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="34" cy="28" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="50" cy="38" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="62" cy="44" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="62" cy="56" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="50" cy="62" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="38" cy="56" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="38" cy="44" r="5" fill="#5a7000" opacity="0.7"/>
-          <circle cx="50" cy="50" r="47" fill="url(#shinGrad)"/>
-        </svg>
+        <div style="display:flex; justify-content:center; align-items:center; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35)); animation: iconSpin 6s ease-in-out infinite;">
+          <svg viewBox="0 0 100 100" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+            <rect x="42" y="65" width="16" height="30" rx="4" fill="#1F2937" />
+            <line x1="42" y1="70" x2="58" y2="75" stroke="#4B5563" stroke-width="2"/>
+            <line x1="42" y1="80" x2="58" y2="85" stroke="#4B5563" stroke-width="2"/>
+            <rect x="25" y="10" width="50" height="55" rx="20" fill="#EE0033" />
+            <rect x="28" y="13" width="44" height="49" rx="17" fill="none" stroke="#FFFFFF" stroke-width="2" opacity="0.4"/>
+            <circle cx="80" cy="25" r="14" fill="#f5f542" />
+            <circle cx="80" cy="18" r="2" fill="#5A7000" opacity="0.6"/>
+            <circle cx="73" cy="22" r="2" fill="#5A7000" opacity="0.6"/>
+            <circle cx="87" cy="22" r="2" fill="#5A7000" opacity="0.6"/>
+            <circle cx="76" cy="29" r="2" fill="#5A7000" opacity="0.6"/>
+            <circle cx="84" cy="29" r="2" fill="#5A7000" opacity="0.6"/>
+          </svg>
+        </div>
       </div>
       <h1 class="hero__title">VTNET PICKLEBALL<br>CHAMPIONSHIP</h1>
       <p class="hero__subtitle">Giải Pickleball Đôi Nam 2026 — Men's Doubles Tournament</p>
@@ -112,7 +96,18 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer__icon">🎾</div>
+    <div class="footer__icon" style="margin-bottom: 8px;">
+      <svg viewBox="0 0 100 100" width="28" height="28" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+        <rect x="42" y="65" width="16" height="30" rx="4" fill="#6B7280" />
+        <rect x="25" y="10" width="50" height="55" rx="20" fill="#EE0033" />
+        <circle cx="80" cy="25" r="14" fill="#f5f542" />
+        <circle cx="80" cy="18" r="2" fill="#5A7000" />
+        <circle cx="73" cy="22" r="2" fill="#5A7000" />
+        <circle cx="87" cy="22" r="2" fill="#5A7000" />
+        <circle cx="76" cy="29" r="2" fill="#5A7000" />
+        <circle cx="84" cy="29" r="2" fill="#5A7000" />
+      </svg>
+    </div>
     <p class="footer__title">VTNet Pickleball Championship 2026</p>
     <p class="footer__copy">© 2026 VTNet. All rights reserved.</p>
   </footer>
@@ -123,12 +118,12 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/data.js?v=6"></script>
-  <script src="js/firebase-config.js?v=6"></script>
-  <script src="js/group-stage.js?v=6"></script>
-  <script src="js/knockout.js?v=6"></script>
-  <script src="js/app.js?v=6"></script>
-  <script src="js/energy.js?v=6"></script>
+  <script src="js/data.js?v=7"></script>
+  <script src="js/firebase-config.js?v=7"></script>
+  <script src="js/group-stage.js?v=7"></script>
+  <script src="js/knockout.js?v=7"></script>
+  <script src="js/app.js?v=7"></script>
+  <script src="js/energy.js?v=7"></script>
 
 </body>
 </html>
