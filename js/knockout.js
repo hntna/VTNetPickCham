@@ -137,34 +137,33 @@ function renderKoFinal(match, scores) {
 }
 
 function renderQualifiedSection(result) {
-  const { direct, wildcards } = result;
+  const { koGroups } = result;
   let html = `
     <div class="qualified-section">
       <h3 class="qualified-title">🎯 16 Đội Vào Vòng Knock-out / Qualified Teams</h3>
       <div class="qualified-grid">`;
 
-  for (let g = 1; g <= 6; g++) {
-    const label = KO_LABELS[g - 1];
-    const first = direct.find(d => d.fromGroup === g && d.koRank === 1);
-    const second = direct.find(d => d.fromGroup === g && d.koRank === 2);
-    const third = wildcards.find(w => w.fromGroup === g);
+  ['A', 'B', 'C', 'D', 'E', 'F'].forEach(label => {
+    const g = koGroups[label];
+    if (!g) return;
+    const groupInfo = g.origGroup ? ` (Bảng ${g.origGroup})` : '';
 
-    if (first) {
+    if (g.first) {
       html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">Bảng ${label} - #1</span>
-        <span>${first.team.name}</span></div>`;
+        <span class="qualified-badge badge-direct">KO ${label} - #1${groupInfo}</span>
+        <span>${g.first.team.name}</span></div>`;
     }
-    if (second) {
+    if (g.second) {
       html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">Bảng ${label} - #2</span>
-        <span>${second.team.name}</span></div>`;
+        <span class="qualified-badge badge-direct">KO ${label} - #2${groupInfo}</span>
+        <span>${g.second.team.name}</span></div>`;
     }
-    if (third) {
+    if (g.third) {
       html += `<div class="qualified-item wildcard">
-        <span class="qualified-badge badge-wildcard">Vớt / WC</span>
-        <span>${third.team.name}</span></div>`;
+        <span class="qualified-badge badge-wildcard">KO ${label} - Top 3${groupInfo}</span>
+        <span>${g.third.team.name}</span></div>`;
     }
-  }
+  });
 
   html += '</div></div>';
   return html;

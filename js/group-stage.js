@@ -63,7 +63,7 @@ function renderStandingsTable(standings, groupNum) {
 
   standings.forEach((s, idx) => {
     const rank = idx + 1;
-    const rowClass = rank <= 2 ? 'qualified' : '';
+    const rowClass = rank <= 2 ? 'qualified' : rank === 3 ? 'wildcard' : '';
     const diff = s.sf - s.sa;
     const diffStr = diff > 0 ? '+' + diff : diff.toString();
 
