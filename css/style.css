@@ -127,8 +127,15 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
   font-size: 58px;
   margin-bottom: 10px;
   position: relative;
-  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
+  display: flex;
+  justify-content: center;
+  filter: drop-shadow(0 6px 20px rgba(0,0,0,0.35));
   animation: iconSpin 6s ease-in-out infinite;
+}
+
+.pickleball-svg {
+  width: 72px;
+  height: 72px;
   display: block;
 }
 
