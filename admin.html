@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - VTNet Pickleball Championship 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Login Section -->
+  <div id="admin-login-section" class="admin-login">
+    <div class="login-card">
+      <div style="text-align:center;font-size:48px;margin-bottom:12px">🔐</div>
+      <h1 class="login-card__title">Admin Login</h1>
+      <p class="login-card__sub">VTNet Pickleball Championship 2026</p>
+
+      <div id="login-error" class="login-error"></div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" placeholder="admin@vtnet.vn" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Mật khẩu / Password</label>
+          <input class="form-input" type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Đăng nhập / Login</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard Section -->
+  <div id="admin-dashboard" class="admin-dashboard">
+    <header class="admin-header">
+      <div class="admin-user">👋 <span id="admin-email"></span></div>
+      <button class="btn btn-outline" id="logout-btn" style="width:auto;padding:8px 16px;font-size:13px">Đăng xuất</button>
+    </header>
+
+    <div class="admin-content">
+      <div class="admin-card">
+        <h2 class="admin-card__title">📋 Chọn trận đấu / Select Match</h2>
+
+        <div class="form-group">
+          <label class="form-label">Vòng đấu / Round</label>
+          <select class="form-select" id="round-select">
+            <option value="">-- Chọn vòng đấu --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Trận đấu / Match</label>
+          <select class="form-select" id="match-select">
+            <option value="">-- Chọn trận --</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="admin-card" id="score-section" style="display:none">
+        <h2 class="admin-card__title">🏓 Nhập tỷ số / Enter Score</h2>
+
+        <div class="score-input-group">
+          <div class="score-team-label" id="team1-label">Đội 1</div>
+          <input class="score-input" type="number" id="score1" min="0" max="99" placeholder="0">
+          <div class="score-vs">VS</div>
+          <input class="score-input" type="number" id="score2" min="0" max="99" placeholder="0">
+          <div class="score-team-label" id="team2-label">Đội 2</div>
+        </div>
+
+        <button class="btn btn-primary" id="save-btn">💾 Lưu Tỷ Số / Save Score</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/group-stage.js"></script>
+  <script src="js/knockout.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

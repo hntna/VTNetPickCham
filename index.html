@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VTNet Pickleball Championship 2026</title>
+  <meta name="description" content="Kết quả Giải Pickleball Đôi Nam VTNet 2026 - Vòng bảng & Vòng loại trực tiếp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div class="hero__icon">🏓</div>
+    <h1 class="hero__title">VTNET PICKLEBALL CHAMPIONSHIP</h1>
+    <p class="hero__subtitle">Giải Pickleball Đôi Nam 2026 — Men's Doubles Tournament</p>
+  </header>
+
+  <!-- Main Navigation -->
+  <nav class="main-tabs">
+    <button class="main-tab active" data-tab="groups">🏅 Vòng Bảng</button>
+    <button class="main-tab" data-tab="knockout">🏆 Knock-out</button>
+  </nav>
+
+  <!-- Content -->
+  <div class="content">
+    <section id="groups-section" class="section active">
+      <div id="group-stage-content">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          Đang tải dữ liệu...
+        </div>
+      </div>
+    </section>
+
+    <section id="knockout-section" class="section">
+      <div id="knockout-stage-content">
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          Đang tải dữ liệu...
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>🏓 VTNet Pickleball Championship 2026</p>
+    <p>© 2026 VTNet. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+
+  <!-- App Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/group-stage.js"></script>
+  <script src="js/knockout.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

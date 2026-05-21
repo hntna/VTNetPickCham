@@ -1,0 +1,30 @@
+Thiết kế cho màn hình hẹp trước. Code CSS thiết kế cho điện thoại trước (~375px rộng), sau đó mới mở rộng ra desktop. Ngược lại sẽ vỡ layout.
+Responsive với meta viewport. Trong HTML có 1 dòng <meta name="viewport"> bắt buộc, thiếu là chữ bé tí trên điện thoại.
+Xử lý sơ đồ knockout: Chia tab theo vòng: bấm tab "1/16" → "Tứ kết" → "Bán kết" → "CK", mỗi tab chỉ hiện các cặp của vòng đó. Đơn giản, dễ đọc
+
+style: 
+- Sử dụng các card, badge được bo góc  
+- Hiệu ứng
+- Đẹp lung linh
+
+Font
+HeadingsFS: PF BeauSans Pro, TYPE SCALE  SemiBold, Fallback: Trebuchet MS, sans-serif
+Subheadings: FS Magistral, Fallback: Arial, sans-serif
+Body Text: Sarabun, Fallback: Segoe UI, Arial, sans-serif
+Caption: Sarabun, Fallback: Segoe UI, Arial, sans-serif
+
+TYPE SCALE
+Heading 1 (H2) :    Bold
+Heading 2 (H3) :    Bold
+Heading 3 (H4) :    SemiBold
+Body           :   Regular
+Small          :   Regular
+Caption        :   Regular
+
+Màu chính: 
+Đỏ (#EE0033) nền trắng
+Màu phụ: 
+chữ đen nền xám nhạt (#F2F2F2)
+chữ đen nền xám đậm (#B5B4B4)
+Chữ trắng nền đen (#44494D)
+
