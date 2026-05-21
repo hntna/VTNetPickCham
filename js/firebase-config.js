@@ -27,9 +27,10 @@ function initFirebase() {
     }
     firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
     firebaseDb = firebase.database();
-    firebaseAuth = firebase.auth();
+    // Auth is optional (not needed on public page)
+    try { firebaseAuth = firebase.auth(); } catch (e) { console.log("Auth SDK not loaded (OK for public page)"); }
     FIREBASE_READY = true;
-    console.log("Firebase initialized successfully.");
+    console.log("Firebase initialized successfully. Auth:", !!firebaseAuth);
     return true;
   } catch (e) {
     console.error("Firebase init error:", e);
@@ -40,12 +41,18 @@ function initFirebase() {
 // Read scores from Firebase
 function listenScores(callback) {
   if (!FIREBASE_READY) {
+    console.warn("Firebase not ready, using demo scores");
     callback(getDemoScores());
     return;
   }
+  console.log("Listening to Firebase scores...");
   firebaseDb.ref('scores').on('value', (snapshot) => {
+    console.log("Firebase data received:", snapshot.val());
     const data = snapshot.val() || {};
     callback(data);
+  }, (error) => {
+    console.error("Firebase read error:", error.message);
+    callback(getDemoScores());
   });
 }
 
