@@ -7,10 +7,9 @@ Chọn ra 12 đội gồm 2 đội có thành tích nhất nhì mỗi bảng và
 
 Vòng 1/16 : 
 16 đội được gán vào 6 bảng A/B/C/D/E/F luật như sau
-- 12 đội nhất nhì (6 cặp chính thức) => sắp xếp lần lượt 6 cặp vào 6 bảng A B C D E F theo số thứ tự bảng của đội ở vòng loại từ bé đến lớn. 
-Thứ hạng các đội trong bảng:  tương ứng nhất nhì (như kết quả vòng bảng) 
-- 4 đội với ở vòng bảng => sắp xếp vào cùng bảng (A/B/C/D/E/F) sao cho 4 đội này cùng bảng với cặp chính thức mà họ được sắp ở vòng bảng
-Thứ hạng các đội trong bảng:  thứ ba 
+- 4 bảng nào mà có 3 đội được vào vòng trong thì xếp bảng A B C D theo số thứ tự bảng của đội ở vòng loại từ bé đến lớn. (ở đây có tổng 3x4 đội được xếp)
+- 4 đội còn lại (thuộc bảng có 2 đội được vào) xếp E F theo thứ tự bảng của đội ở vòng loại từ bé đến lớn
+- Thứ hạng các đội trong bảng:  giữ nguyên như thành tích ở vòng bảng
 
 Thi đấu:
 Nhất A vs Ba B	--Trận 1-->
