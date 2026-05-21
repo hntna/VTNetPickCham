@@ -47,9 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function populateRoundSelect() {
   const sel = document.getElementById('round-select');
   sel.innerHTML = '<option value="">-- Chọn vòng đấu / Select Round --</option>';
-  for (let g = 1; g <= 6; g++) sel.innerHTML += `<option value="group-${g}">Bảng ${g} / Group ${g}</option>`;
-  sel.innerHTML += '<option value="ko">Vòng 1/16</option><option value="qf">Tứ Kết / Quarter Finals</option>';
-  sel.innerHTML += '<option value="sf">Bán Kết / Semi Finals</option><option value="final">Chung Kết / Final</option>';
+  sel.innerHTML += `<option value="all-groups">🏅 Vòng Bảng (Tất cả 6 bảng)</option>`;
+  sel.innerHTML += '<option value="ko">🔥 Vòng 1/16</option><option value="qf">🏆 Tứ Kết / Quarter Finals</option>';
+  sel.innerHTML += '<option value="sf">🏅 Bán Kết / Semi Finals</option><option value="final">🏆 Chung Kết / Final</option>';
 }
 
 function renderRoundMatches() {
@@ -59,16 +59,19 @@ function renderRoundMatches() {
 
   let html = '';
 
-  if (roundVal.startsWith('group-')) {
-    const g = parseInt(roundVal.split('-')[1]);
-    const teams = TOURNAMENT.groups[g];
-    const matches = generateGroupMatches(teams);
-    html += `<h3 style="text-align:center;margin-bottom:16px;color:var(--primary)">🏓 Bảng ${g} - ${matches.length} trận</h3>`;
-    matches.forEach((m, idx) => {
-      const key = g + '-' + idx;
-      const sc = adminScores.group[key];
-      html += matchInputCard(m[0].name, m[1].name, 'group', key, sc, 11);
-    });
+  if (roundVal === 'all-groups') {
+    for (let g = 1; g <= 6; g++) {
+      const teams = TOURNAMENT.groups[g];
+      const matches = generateGroupMatches(teams);
+      html += `<div style="background:var(--gray-50); padding:16px; margin-bottom:24px; border-radius:12px; border:1px solid #ddd;">`;
+      html += `<h3 style="text-align:center;margin-bottom:16px;color:var(--primary)">🏓 Bảng ${g}</h3>`;
+      matches.forEach((m, idx) => {
+        const key = g + '-' + idx;
+        const sc = adminScores.group[key];
+        html += matchInputCard(m[0].name, m[1].name, 'group', key, sc, 11);
+      });
+      html += `</div>`;
+    }
   } else if (roundVal === 'ko') {
     const result = determineKnockoutTeams(adminScores);
     const bracket = buildKnockoutBracket(result.koGroups);
