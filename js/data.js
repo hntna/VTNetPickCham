@@ -148,9 +148,14 @@ function getMatchWinner(matchKey, t1, t2, scores, stage) {
   if (t1 && !t2) return t1; // BYE
   if (!t1 && !t2) return null;
 
-  const stageScores = scores[stage];
-  if (!stageScores) return null;
-  const sc = stageScores[matchKey];
+  let sc;
+  if (stage === 'final') {
+    sc = scores.final;
+  } else {
+    const stageScores = scores[stage];
+    if (!stageScores) return null;
+    sc = stageScores[matchKey];
+  }
   if (!sc || sc.s1 === '' || sc.s2 === '' || sc.s1 == null || sc.s2 == null) return null;
 
   const s1 = parseInt(sc.s1), s2 = parseInt(sc.s2);
