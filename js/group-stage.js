@@ -29,7 +29,7 @@ function renderGroupCard(groupNum, scores) {
   let html = `
     <div class="group-card" id="group-${groupNum}">
       <div class="group-card__header">
-        <h3 class="group-card__title">🏓 Bảng ${groupNum}</h3>
+        <h3 class="group-card__title">🎾 Bảng ${groupNum}</h3>
         <span class="group-card__badge">Round Robin</span>
       </div>
       <div class="group-card__body">

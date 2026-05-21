@@ -34,13 +34,12 @@ function renderKnockoutStage(scores) {
 
   // Render tabs + content
   let html = renderKoTabs();
-  html += '<div id="ko-round16" class="ko-round-content">' + renderKoRound(r16, scores, 'ko', 'round16') + '</div>';
+  // Qualified section lives inside the 1/16 tab so the layout is clean
+  const r16Content = renderKoRound(r16, scores, 'ko', 'round16') + renderQualifiedSection(result);
+  html += '<div id="ko-round16" class="ko-round-content">' + r16Content + '</div>';
   html += '<div id="ko-qf" class="ko-round-content" style="display:none">' + renderKoRound(qf, scores, 'qf', 'qf') + '</div>';
   html += '<div id="ko-sf" class="ko-round-content" style="display:none">' + renderKoRound(sf, scores, 'sf', 'sf') + '</div>';
   html += '<div id="ko-final" class="ko-round-content" style="display:none">' + renderKoFinal(finalMatch, scores) + '</div>';
-
-  // Qualified teams section
-  html += renderQualifiedSection(result);
 
   container.innerHTML = html;
   setActiveKoTab(currentKoTab);
