@@ -70,6 +70,7 @@ function calcStandings(groupNum, scores) {
     if (!sc || sc.s1 === '' || sc.s2 === '' || sc.s1 == null || sc.s2 == null) return;
     const s1 = parseInt(sc.s1), s2 = parseInt(sc.s2);
     if (isNaN(s1) || isNaN(s2)) return;
+    if (s1 === 0 && s2 === 0) return; // 0-0 means unplayed
 
     const t1 = stats.find(s => s.team.id === m[0].id);
     const t2 = stats.find(s => s.team.id === m[1].id);
@@ -178,5 +179,6 @@ function getMatchWinner(matchKey, t1, t2, scores, stage) {
 
   const s1 = parseInt(sc.s1), s2 = parseInt(sc.s2);
   if (isNaN(s1) || isNaN(s2)) return null;
+  if (s1 === 0 && s2 === 0) return null; // 0-0 means unplayed
   return s1 > s2 ? t1 : (s2 > s1 ? t2 : null);
 }

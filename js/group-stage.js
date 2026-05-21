@@ -90,7 +90,7 @@ function renderMatchList(matches, groupNum, scores) {
     const sc = scores.group ? scores.group[key] : null;
     const s1 = sc ? sc.s1 : null;
     const s2 = sc ? sc.s2 : null;
-    const hasScore = s1 != null && s2 != null && s1 !== '' && s2 !== '';
+    const hasScore = s1 != null && s2 != null && s1 !== '' && s2 !== '' && !(parseInt(s1) === 0 && parseInt(s2) === 0);
 
     let scoreHtml;
     if (hasScore) {
