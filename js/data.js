@@ -87,34 +87,52 @@ function calcStandings(groupNum, scores) {
 // Determine 16 teams for knockout
 function determineKnockoutTeams(scores) {
   const allStandings = {};
-  const direct = []; // 12 teams (top 2 each group)
-  const remaining = []; // 12 teams (rank 3-4)
+  const direct = [];
+  const potentialWC = []; // Only rank 3 from each group
 
   for (let g = 1; g <= 6; g++) {
     const st = calcStandings(g, scores);
     allStandings[g] = st;
     if (st[0]) direct.push({ ...st[0], fromGroup: g, koRank: 1 });
     if (st[1]) direct.push({ ...st[1], fromGroup: g, koRank: 2 });
-    if (st[2]) remaining.push({ ...st[2], fromGroup: g });
-    if (st[3]) remaining.push({ ...st[3], fromGroup: g });
+    if (st[2]) potentialWC.push({ ...st[2], fromGroup: g });
   }
 
-  // Sort remaining by points desc, then score diff, then scored
-  remaining.sort((a, b) => b.pts - a.pts || (b.sf - b.sa) - (a.sf - a.sa) || b.sf - a.sf);
-  const wildcards = remaining.slice(0, 4).map(t => ({ ...t, koRank: 3 }));
+  // Pick best 4 rank-3 teams as wildcards
+  potentialWC.sort((a, b) => b.pts - a.pts || (b.sf - b.sa) - (a.sf - a.sa) || b.sf - a.sf);
+  const wildcards = potentialWC.slice(0, 4).map(t => ({ ...t, koRank: 3 }));
 
-  // Build KO groups: A-F
-  const koGroups = {};
+  // Groups with wildcard (3 qualifiers) → sorted ascending → KO A,B,C,D
+  // Groups without wildcard (2 qualifiers) → sorted ascending → KO E,F
+  const wcGroupNums = wildcards.map(w => w.fromGroup).sort((a, b) => a - b);
+  const nonWcGroupNums = [];
   for (let g = 1; g <= 6; g++) {
-    const label = KO_LABELS[g - 1];
+    if (!wcGroupNums.includes(g)) nonWcGroupNums.push(g);
+  }
+
+  const koGroups = {};
+  ['A', 'B', 'C', 'D'].forEach((label, i) => {
+    const g = wcGroupNums[i];
+    if (!g) return;
     koGroups[label] = {
       first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
       second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
-      third: wildcards.find(w => w.fromGroup === g) || null
+      third: wildcards.find(w => w.fromGroup === g) || null,
+      origGroup: g
     };
-  }
+  });
+  ['E', 'F'].forEach((label, i) => {
+    const g = nonWcGroupNums[i];
+    if (!g) return;
+    koGroups[label] = {
+      first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
+      second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
+      third: null,
+      origGroup: g
+    };
+  });
 
-  return { allStandings, direct, wildcards, koGroups };
+  return { allStandings, direct, wildcards, koGroups, wcGroupNums, nonWcGroupNums };
 }
 
 // Build knockout bracket matchups
