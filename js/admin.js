@@ -230,7 +230,7 @@ function teamRowHtml(g, i, name) {
   return `
     <div class="team-row" data-group="${g}" data-idx="${i}">
       <input type="text" class="form-input team-input" value="${name || ''}" placeholder="Nguyễn Văn A / Trần Thị B" onchange="updateTeamData(${g}, ${i}, this.value)">
-      <button class="btn btn-outline" style="padding:8px; color:#DC2626; border-color:#DC2626;" onclick="deleteTeamRow(${g}, ${i})" title="Xoá">🗑</button>
+      <button class="btn-delete" onclick="deleteTeamRow(${g}, ${i})" title="Xoá">🗑</button>
     </div>
   `;
 }

@@ -90,6 +90,13 @@
     .home-link:hover { text-decoration: underline; }
     .team-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .team-row input { flex: 1; }
+    .btn-delete {
+      width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      color: #DC2626; border: 2px solid #DC2626; border-radius: var(--radius); background: none; cursor: pointer;
+      font-size: 18px; transition: all 0.2s;
+    }
+    .btn-delete:hover { background: #FEE2E2; }
+    .btn-delete:active { transform: scale(0.95); }
     .btn-save-one:active { transform: scale(0.95); }
 
     @media (min-width: 768px) {
@@ -162,8 +169,7 @@
               <option value="1">Bảng 1</option><option value="2">Bảng 2</option>
               <option value="3">Bảng 3</option><option value="4">Bảng 4</option>
               <option value="5">Bảng 5</option><option value="6">Bảng 6</option>
-            </select>
-            <textarea id="import-textarea" class="form-input" style="height: 100px; resize: vertical;" placeholder="Dán danh sách đội (mỗi đội 1 dòng)\nVí dụ: Nguyễn Văn A / Trần Thị B..."></textarea>
+            <textarea id="import-textarea" class="form-input" style="height: 100px; resize: vertical;" placeholder="Dán danh sách đội (mỗi đội 1 dòng)&#10;Ví dụ: Nguyễn Văn A / Trần Thị B..."></textarea>
             <button class="btn btn-outline" style="margin-top:8px" onclick="importTeams()">Import vào Bảng này</button>
           </div>
 
@@ -185,11 +191,11 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/data.js?v=13"></script>
-  <script src="js/firebase-config.js?v=13"></script>
-  <script src="js/group-stage.js?v=13"></script>
-  <script src="js/knockout.js?v=13"></script>
-  <script src="js/admin.js?v=13"></script>
+  <script src="js/data.js?v=14"></script>
+  <script src="js/firebase-config.js?v=14"></script>
+  <script src="js/group-stage.js?v=14"></script>
+  <script src="js/knockout.js?v=14"></script>
+  <script src="js/admin.js?v=14"></script>
 
 </body>
 </html>
