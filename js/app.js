@@ -45,9 +45,6 @@ function setupCategoryTabs() {
       tab.classList.add('active');
       CURRENT_CATEGORY = tab.dataset.cat;
       
-      const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
-      const subtitleEl = document.querySelector('.hero__subtitle');
-      if (subtitleEl) subtitleEl.textContent = `Giải Pickleball ${config.name} 2026`;
       
       loadDataForCurrentCategory();
     });
