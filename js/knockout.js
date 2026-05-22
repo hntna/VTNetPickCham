@@ -164,6 +164,14 @@ function renderKoFinal(match, scores) {
 function renderQualifiedSection(result, config) {
   const { koGroups } = result;
   const numTeams = config.knockoutStart === 'ko' ? 16 : (config.knockoutStart === 'qf' ? 8 : 4);
+  
+  if (Object.keys(koGroups).length === 0) {
+    return `
+      <div class="qualified-section">
+        <h3 class="qualified-title" style="color: var(--gray-500); text-align: center;">⏳ Đang chờ hoàn tất Vòng Bảng...</h3>
+      </div>`;
+  }
+
   let html = `
     <div class="qualified-section">
       <h3 class="qualified-title">🎯 ${numTeams} Đội Vào Vòng Knock-out / Qualified Teams</h3>

@@ -113,12 +113,30 @@ function calcStandings(groupNum, scores) {
   return stats;
 }
 
+function areAllGroupMatchesFinished(scores) {
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
+  for (let g = 1; g <= config.groupsCount; g++) {
+    const teams = TOURNAMENT.groups[g] || [];
+    const matches = generateGroupMatches(teams);
+    for (let i = 0; i < matches.length; i++) {
+      const matchKey = g + '-' + i;
+      const sc = scores.group && scores.group[matchKey];
+      if (!sc || sc.s1 == null || sc.s2 == null || sc.s1 === '' || sc.s2 === '') {
+        return false; // Found an unfinished match
+      }
+    }
+  }
+  return true;
+}
+
 // Determine 16 teams for knockout
 function determineKnockoutTeams(scores) {
   const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   const allStandings = {};
   const direct = [];
   const potentialWC = [];
+
+  const allFinished = areAllGroupMatchesFinished(scores);
 
   for (let g = 1; g <= config.groupsCount; g++) {
     const st = calcStandings(g, scores);
@@ -130,6 +148,10 @@ function determineKnockoutTeams(scores) {
 
   const koGroups = {};
   
+  if (!allFinished) {
+    return { allStandings, direct: [], wildcards: [], koGroups: {}, wcGroupNums: [], nonWcGroupNums: [] };
+  }
+
   if (config.advanceRule === 'top3') {
     potentialWC.sort((a, b) => b.pts - a.pts || (b.sf - b.sa) - (a.sf - a.sa) || b.sf - a.sf);
     const wildcards = potentialWC.slice(0, 4).map(t => ({ ...t, koRank: 3 }));
