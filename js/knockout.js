@@ -175,30 +175,38 @@ function renderQualifiedSection(result, config) {
   let html = `
     <div class="qualified-section">
       <h3 class="qualified-title">🎯 ${numTeams} Đội Vào Vòng Knock-out / Qualified Teams</h3>
-      <div class="qualified-grid">`;
+      <div class="groups-grid" style="gap: 16px; margin-top: 16px;">`;
 
-  const groupLabels = config.advanceRule === 'top3' ? ['A', 'B', 'C', 'D', 'E', 'F'] : Object.keys(koGroups);
-  groupLabels.forEach(label => {
-    const g = koGroups[label];
-    if (!g) return;
-    const groupInfo = g.origGroup ? ` (Bảng ${g.origGroup})` : ` (Bảng ${label})`;
+  for (let g = 1; g <= config.groupsCount; g++) {
+    let t1 = null, t2 = null, t3 = null;
+    let label = '';
+    
+    for (const key of Object.keys(koGroups)) {
+      if (koGroups[key].origGroup == g) {
+        t1 = koGroups[key].first;
+        t2 = koGroups[key].second;
+        t3 = koGroups[key].third;
+        label = key;
+        break;
+      }
+    }
 
-    if (g.first) {
-      html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">#1${groupInfo}</span>
-        <span>${g.first.team.name}</span></div>`;
+    if (!t1 && !t2 && !t3) continue;
+
+    html += `<div style="background: var(--white); border: 1px solid var(--gray-200); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+               <h4 style="color: var(--gray-800); font-size: 16px; border-bottom: 1px solid var(--gray-100); padding-bottom: 8px; margin-bottom: 4px;">🏓 Bảng ${g} ${config.advanceRule === 'top3' ? '<span style="font-size:12px; color:var(--gray-500); font-weight:normal">(Nhánh KO ' + label + ')</span>' : ''}</h4>`;
+    
+    if (t1) {
+      html += `<div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color: var(--gray-800);"><span class="qualified-badge badge-direct" style="min-width: 65px; text-align: center;">#1</span> <span style="flex:1;">${t1.team.name}</span></div>`;
     }
-    if (g.second) {
-      html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">#2${groupInfo}</span>
-        <span>${g.second.team.name}</span></div>`;
+    if (t2) {
+      html += `<div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color: var(--gray-800);"><span class="qualified-badge badge-direct" style="min-width: 65px; text-align: center;">#2</span> <span style="flex:1;">${t2.team.name}</span></div>`;
     }
-    if (g.third) {
-      html += `<div class="qualified-item wildcard">
-        <span class="qualified-badge badge-wildcard">Top 3${groupInfo}</span>
-        <span>${g.third.team.name}</span></div>`;
+    if (t3) {
+      html += `<div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color: var(--gray-800);"><span class="qualified-badge badge-wildcard" style="min-width: 65px; text-align: center;">Top 3</span> <span style="flex:1;">${t3.team.name}</span></div>`;
     }
-  });
+    html += `</div>`;
+  }
 
   html += '</div></div>';
   return html;
