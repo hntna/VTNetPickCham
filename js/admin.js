@@ -257,27 +257,82 @@ function deleteTeamRow(g, idx) {
   }
 }
 
-function importTeams() {
-  const g = document.getElementById('import-group-select').value;
-  const text = document.getElementById('import-textarea').value.trim();
-  if (!text) { showToast('Vui lòng nhập danh sách!', 'error'); return; }
-  
-  const lines = text.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
-  if (!adminTeams[g]) adminTeams[g] = [];
-  
-  lines.forEach(line => {
-    const parts = line.split('/').map(s => s.trim());
-    adminTeams[g].push({
-      id: `${g}-${adminTeams[g].length + 1}`,
-      name: line,
-      p1: parts[0] || '',
-      p2: parts[1] || ''
-    });
-  });
-  
-  document.getElementById('import-textarea').value = '';
-  renderTeamsManager();
-  showToast(`Đã import ${lines.length} đội vào Bảng ${g}!`, 'success');
+function downloadExcelTemplate() {
+  const wsData = [
+    ["Bảng", "Người chơi 1", "Người chơi 2"],
+    [1, "Nguyễn Văn A", "Trần Thị B"],
+    [1, "Lê Văn C", "Hoàng Thị D"],
+    [2, "Phạm Văn E", "Ngô Thị F"],
+    [2, "Trịnh Văn G", "Lý Thị H"]
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "DanhSachDoi");
+  XLSX.writeFile(wb, "Template_DanhSachDoi.xlsx");
+}
+
+function importExcelTeams() {
+  const fileInput = document.getElementById('import-excel-file');
+  if (!fileInput.files.length) {
+    showToast('Vui lòng chọn file Excel hoặc CSV!', 'error');
+    return;
+  }
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, {type: 'array'});
+      const firstSheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheetName];
+      const json = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+      
+      const newTeams = {};
+      let importedCount = 0;
+      
+      for (let i = 1; i < json.length; i++) {
+        const row = json[i];
+        if (!row || row.length === 0) continue;
+        
+        let bang = row[0];
+        let p1 = row[1] || '';
+        let p2 = row[2] || '';
+        
+        if (bang == null) continue;
+        const bangMatch = String(bang).match(/\d+/);
+        if (!bangMatch) continue;
+        const g = parseInt(bangMatch[0]);
+        if (g < 1 || g > 6) continue;
+        
+        if (!newTeams[g]) newTeams[g] = [];
+        
+        const name = (p1 && p2) ? `${p1} / ${p2}` : (p1 || p2);
+        if (!name) continue;
+        
+        newTeams[g].push({
+          id: `${g}-${newTeams[g].length + 1}`,
+          name: name,
+          p1: String(p1).trim(),
+          p2: String(p2).trim()
+        });
+        importedCount++;
+      }
+      
+      if (importedCount === 0) {
+        showToast('Không tìm thấy dữ liệu hợp lệ trong file!', 'error');
+        return;
+      }
+      
+      adminTeams = newTeams;
+      renderTeamsManager();
+      fileInput.value = '';
+      showToast(`✅ Đã import ${importedCount} đội! Hãy bấm Lưu Lên Server.`, 'success');
+    } catch(err) {
+      console.error(err);
+      showToast('❌ Lỗi khi đọc file Excel!', 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
 }
 
 function saveAllTeams() {
