@@ -58,6 +58,38 @@
       transition: all 0.2s;
     }
     .btn-save-one:hover { background: var(--primary-bg); border-color: var(--primary); }
+    .admin-tabs {
+      display: flex;
+      margin-bottom: 20px;
+      gap: 10px;
+      border-bottom: 2px solid var(--gray-200);
+      padding-bottom: 10px;
+    }
+    .admin-tab {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: all 0.2s;
+    }
+    .admin-tab:hover { background: var(--gray-100); }
+    .admin-tab.active { background: var(--primary); color: white; }
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .home-link {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .home-link:hover { text-decoration: underline; }
+    .team-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .team-row input { flex: 1; }
     .btn-save-one:active { transform: scale(0.95); }
 
     @media (min-width: 768px) {
@@ -100,14 +132,47 @@
     </header>
 
     <div class="admin-content">
-      <div class="admin-card">
-        <h2 class="admin-card__title">📋 Chọn vòng đấu / Select Round</h2>
-        <select class="form-select" id="round-select">
-          <option value="">-- Chọn vòng đấu --</option>
-        </select>
+      <a href="index.html" class="home-link">← Quay về Trang Chủ</a>
+      
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="scores">Quản lý Tỷ số</button>
+        <button class="admin-tab" data-tab="teams">Quản lý Đội</button>
       </div>
 
-      <div id="matches-container"></div>
+      <!-- SCORES SECTION -->
+      <div id="scores-section" class="admin-section active">
+        <div class="admin-card">
+          <h2 class="admin-card__title">📋 Chọn vòng đấu / Select Round</h2>
+          <select class="form-select" id="round-select">
+            <option value="">-- Chọn vòng đấu --</option>
+          </select>
+        </div>
+        <div id="matches-container"></div>
+      </div>
+
+      <!-- TEAMS SECTION -->
+      <div id="teams-section" class="admin-section">
+        <div class="admin-card">
+          <h2 class="admin-card__title">👥 Quản lý Danh sách Đội</h2>
+          <p style="color:var(--gray-500);font-size:14px;margin-bottom:16px;">Chọn bảng để Import hoặc tự chỉnh sửa danh sách bên dưới.</p>
+          
+          <div style="margin-bottom: 20px; padding: 12px; background: var(--gray-50); border-radius: 8px; border: 1px solid var(--gray-200);">
+            <h3 style="font-size:15px; margin-bottom:8px;">📥 Import Hàng Loạt</h3>
+            <select class="form-select" id="import-group-select" style="margin-bottom: 8px;">
+              <option value="1">Bảng 1</option><option value="2">Bảng 2</option>
+              <option value="3">Bảng 3</option><option value="4">Bảng 4</option>
+              <option value="5">Bảng 5</option><option value="6">Bảng 6</option>
+            </select>
+            <textarea id="import-textarea" class="form-input" style="height: 100px; resize: vertical;" placeholder="Dán danh sách đội (mỗi đội 1 dòng)\nVí dụ: Nguyễn Văn A / Trần Thị B..."></textarea>
+            <button class="btn btn-outline" style="margin-top:8px" onclick="importTeams()">Import vào Bảng này</button>
+          </div>
+
+          <div id="teams-container"></div>
+
+          <button class="btn btn-primary" style="margin-top:20px" onclick="saveAllTeams()">💾 Lưu Tất Cả Đội Lên Server</button>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 
@@ -120,11 +185,11 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/data.js?v=10"></script>
-  <script src="js/firebase-config.js?v=10"></script>
-  <script src="js/group-stage.js?v=10"></script>
-  <script src="js/knockout.js?v=10"></script>
-  <script src="js/admin.js?v=10"></script>
+  <script src="js/data.js?v=13"></script>
+  <script src="js/firebase-config.js?v=13"></script>
+  <script src="js/group-stage.js?v=13"></script>
+  <script src="js/knockout.js?v=13"></script>
+  <script src="js/admin.js?v=13"></script>
 
 </body>
 </html>

@@ -2,11 +2,32 @@
 
 let currentScores = { group: {}, ko: {}, qf: {}, sf: {}, final: null };
 let currentMainTab = 'groups';
+let teamsLoaded = false;
+let scoresLoaded = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   initFirebase();
   setupMainTabs();
-  listenScores(onScoresUpdate);
+  
+  listenTeams(teams => {
+    if (teams) {
+      TOURNAMENT.groups = teams;
+    } else {
+      TOURNAMENT.groups = DEFAULT_TEAMS;
+    }
+    teamsLoaded = true;
+    if (scoresLoaded) renderAll();
+  });
+
+  listenScores(scores => {
+    currentScores = scores || { group: {}, ko: {}, qf: {}, sf: {}, final: null };
+    if (!currentScores.group) currentScores.group = {};
+    if (!currentScores.ko) currentScores.ko = {};
+    if (!currentScores.qf) currentScores.qf = {};
+    if (!currentScores.sf) currentScores.sf = {};
+    scoresLoaded = true;
+    if (teamsLoaded) renderAll();
+  });
 });
 
 function setupMainTabs() {
@@ -19,15 +40,6 @@ function setupMainTabs() {
       if (section) section.classList.add('active');
     });
   });
-}
-
-function onScoresUpdate(scores) {
-  currentScores = scores || { group: {}, ko: {}, qf: {}, sf: {}, final: null };
-  if (!currentScores.group) currentScores.group = {};
-  if (!currentScores.ko) currentScores.ko = {};
-  if (!currentScores.qf) currentScores.qf = {};
-  if (!currentScores.sf) currentScores.sf = {};
-  renderAll();
 }
 
 function renderAll() {

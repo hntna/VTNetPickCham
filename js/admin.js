@@ -1,9 +1,13 @@
 /* Admin Controller - All matches per round */
 
 let adminScores = { group: {}, ko: {}, qf: {}, sf: {}, final: null };
+let adminTeams = null;
+let scoresLoaded = false;
+let teamsLoaded = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   initFirebase();
+  setupAdminTabs();
 
   // Login form
   document.getElementById('login-form').addEventListener('submit', e => {
@@ -34,15 +38,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  listenTeams(teams => {
+    adminTeams = teams || JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+    TOURNAMENT.groups = adminTeams;
+    teamsLoaded = true;
+    if (scoresLoaded) {
+      renderRoundMatches();
+      renderTeamsManager();
+    }
+  });
+
   listenScores(scores => {
     adminScores = scores || { group: {}, ko: {}, qf: {}, sf: {}, final: null };
     if (!adminScores.group) adminScores.group = {};
     if (!adminScores.ko) adminScores.ko = {};
     if (!adminScores.qf) adminScores.qf = {};
     if (!adminScores.sf) adminScores.sf = {};
-    renderRoundMatches();
+    scoresLoaded = true;
+    if (teamsLoaded) {
+      renderRoundMatches();
+      renderTeamsManager();
+    }
   });
 });
+
+function setupAdminTabs() {
+  document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.admin-tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      const section = document.getElementById(tab.dataset.tab + '-section');
+      if (section) section.classList.add('active');
+    });
+  });
+}
 
 function populateRoundSelect() {
   const sel = document.getElementById('round-select');
@@ -169,4 +198,105 @@ function showToast(msg, type) {
   toast.textContent = msg;
   toast.className = 'toast ' + type + ' show';
   setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+/* --- Team Management Logic --- */
+
+function renderTeamsManager() {
+  const container = document.getElementById('teams-container');
+  if (!container || !adminTeams) return;
+  
+  let html = '';
+  for (let g = 1; g <= 6; g++) {
+    const teams = adminTeams[g] || [];
+    html += `
+      <div style="background:var(--gray-50); padding:16px; margin-bottom:16px; border-radius:12px; border:1px solid #ddd;">
+        <h3 style="color:var(--primary); margin-bottom:12px;">🏓 Bảng ${g}</h3>
+        <div id="team-list-g${g}">
+    `;
+    teams.forEach((t, i) => {
+      html += teamRowHtml(g, i, t.name);
+    });
+    html += `
+        </div>
+        <button class="btn btn-outline" style="margin-top:8px; padding:4px 12px; font-size:13px;" onclick="addTeamRow(${g})">+ Thêm Đội</button>
+      </div>
+    `;
+  }
+  container.innerHTML = html;
+}
+
+function teamRowHtml(g, i, name) {
+  return `
+    <div class="team-row" data-group="${g}" data-idx="${i}">
+      <input type="text" class="form-input team-input" value="${name || ''}" placeholder="Nguyễn Văn A / Trần Thị B" onchange="updateTeamData(${g}, ${i}, this.value)">
+      <button class="btn btn-outline" style="padding:8px; color:#DC2626; border-color:#DC2626;" onclick="deleteTeamRow(${g}, ${i})" title="Xoá">🗑</button>
+    </div>
+  `;
+}
+
+function updateTeamData(g, idx, val) {
+  if (!adminTeams[g]) adminTeams[g] = [];
+  if (!adminTeams[g][idx]) adminTeams[g][idx] = { id: `${g}-${idx+1}`, name: val, p1: '', p2: '' };
+  adminTeams[g][idx].name = val;
+  const parts = val.split('/').map(s => s.trim());
+  adminTeams[g][idx].p1 = parts[0] || '';
+  adminTeams[g][idx].p2 = parts[1] || '';
+}
+
+function addTeamRow(g) {
+  if (!adminTeams[g]) adminTeams[g] = [];
+  adminTeams[g].push({ id: `${g}-${adminTeams[g].length + 1}`, name: '', p1: '', p2: '' });
+  renderTeamsManager();
+}
+
+function deleteTeamRow(g, idx) {
+  if (confirm(`Bạn có chắc muốn xoá đội này ở Bảng ${g}?`)) {
+    adminTeams[g].splice(idx, 1);
+    renderTeamsManager();
+  }
+}
+
+function importTeams() {
+  const g = document.getElementById('import-group-select').value;
+  const text = document.getElementById('import-textarea').value.trim();
+  if (!text) { showToast('Vui lòng nhập danh sách!', 'error'); return; }
+  
+  const lines = text.split('\\n').map(l => l.trim()).filter(l => l.length > 0);
+  if (!adminTeams[g]) adminTeams[g] = [];
+  
+  lines.forEach(line => {
+    const parts = line.split('/').map(s => s.trim());
+    adminTeams[g].push({
+      id: `${g}-${adminTeams[g].length + 1}`,
+      name: line,
+      p1: parts[0] || '',
+      p2: parts[1] || ''
+    });
+  });
+  
+  document.getElementById('import-textarea').value = '';
+  renderTeamsManager();
+  showToast(`Đã import ${lines.length} đội vào Bảng ${g}!`, 'success');
+}
+
+function saveAllTeams() {
+  // Validate empty teams
+  for (let g = 1; g <= 6; g++) {
+    if (adminTeams[g]) {
+      adminTeams[g] = adminTeams[g].filter(t => t.name.trim() !== '');
+      // Reassign IDs based on index
+      adminTeams[g].forEach((t, i) => {
+        t.id = `${g}-${i+1}`;
+      });
+    }
+  }
+  
+  saveTeams(adminTeams).then(() => {
+    TOURNAMENT.groups = adminTeams;
+    showToast('✅ Đã lưu danh sách đội thành công!', 'success');
+    renderTeamsManager(); // re-render with clean data
+  }).catch(err => {
+    showToast('❌ Lỗi: ' + err, 'error');
+  });
 }

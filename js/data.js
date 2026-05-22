@@ -1,46 +1,48 @@
 /* VTNet Pickleball Championship 2026 - Team Data */
 
-const TOURNAMENT = {
+const DEFAULT_TEAMS = {
+  1: [
+    { id: "1-1", name: "Ngô Đại Dương / Hà Trọng Trường", p1: "Ngô Đại Dương", p2: "Hà Trọng Trường" },
+    { id: "1-2", name: "Lê Văn Bình / Hoàng Xuân Hưng", p1: "Lê Văn Bình", p2: "Hoàng Xuân Hưng" },
+    { id: "1-3", name: "Bùi Mạnh Linh / Dương Minh Thành", p1: "Bùi Mạnh Linh", p2: "Dương Minh Thành" },
+    { id: "1-4", name: "Vũ Đình Thành / Nguyễn Văn Công", p1: "Vũ Đình Thành", p2: "Nguyễn Văn Công" }
+  ],
+  2: [
+    { id: "2-1", name: "Phạm Ngọc Nhật Linh / Nguyễn Quang Long", p1: "Phạm Ngọc Nhật Linh", p2: "Nguyễn Quang Long" },
+    { id: "2-2", name: "Nguyễn Tiến Đạt / Đặng Thái Sơn", p1: "Nguyễn Tiến Đạt", p2: "Đặng Thái Sơn" },
+    { id: "2-3", name: "Trần Quang Minh / Nguyễn Minh Thuần", p1: "Trần Quang Minh", p2: "Nguyễn Minh Thuần" },
+    { id: "2-4", name: "Đinh Thế Sơn / Nguyễn Công Định", p1: "Đinh Thế Sơn", p2: "Nguyễn Công Định" }
+  ],
+  3: [
+    { id: "3-1", name: "Hồ Anh Dũng / Bùi Đức Lâm", p1: "Hồ Anh Dũng", p2: "Bùi Đức Lâm" },
+    { id: "3-2", name: "Dương Đức Thành / Đặng Việt Hải", p1: "Dương Đức Thành", p2: "Đặng Việt Hải" },
+    { id: "3-3", name: "Nguyễn Tuấn Dũng / Nguyễn Nhân Long", p1: "Nguyễn Tuấn Dũng", p2: "Nguyễn Nhân Long" },
+    { id: "3-4", name: "Phạm Ngọc Thắng / Bùi Doãn Hải", p1: "Phạm Ngọc Thắng", p2: "Bùi Doãn Hải" }
+  ],
+  4: [
+    { id: "4-1", name: "Bùi Văn Họa / Hoàng Công Tú", p1: "Bùi Văn Họa", p2: "Hoàng Công Tú" },
+    { id: "4-2", name: "Phạm Tuấn Dương / Trần Minh Tiến", p1: "Phạm Tuấn Dương", p2: "Trần Minh Tiến" },
+    { id: "4-3", name: "Nguyễn Tuấn Anh / Nghiêm Chu Hiếu", p1: "Nguyễn Tuấn Anh", p2: "Nghiêm Chu Hiếu" },
+    { id: "4-4", name: "Nguyễn Khắc Phi / Đặng Đình Tài", p1: "Nguyễn Khắc Phi", p2: "Đặng Đình Tài" }
+  ],
+  5: [
+    { id: "5-1", name: "Đặng Hoài Sơn / Trần Văn Luận", p1: "Đặng Hoài Sơn", p2: "Trần Văn Luận" },
+    { id: "5-2", name: "An Văn Hưởng / Vũ Công Mạnh", p1: "An Văn Hưởng", p2: "Vũ Công Mạnh" },
+    { id: "5-3", name: "Đào Đại Nghĩa / Lê Ngọc Nam", p1: "Đào Đại Nghĩa", p2: "Lê Ngọc Nam" },
+    { id: "5-4", name: "Nguyễn Khải Hoàn / Vũ Viết Cường", p1: "Nguyễn Khải Hoàn", p2: "Vũ Viết Cường" }
+  ],
+  6: [
+    { id: "6-1", name: "Trần Anh Dũng / Nguyễn Hồng Lĩnh", p1: "Trần Anh Dũng", p2: "Nguyễn Hồng Lĩnh" },
+    { id: "6-2", name: "Nguyễn Tuấn Tú / Nguyễn Văn Hạnh", p1: "Nguyễn Tuấn Tú", p2: "Nguyễn Văn Hạnh" },
+    { id: "6-3", name: "Đỗ Quang Huy / Nguyễn Văn Thạch", p1: "Đỗ Quang Huy", p2: "Nguyễn Văn Thạch" },
+    { id: "6-4", name: "Trần Tuấn Trung / Ngô Hùng Cường", p1: "Trần Tuấn Trung", p2: "Ngô Hùng Cường" }
+  ]
+};
+
+let TOURNAMENT = {
   name: "VTNet Pickleball Championship 2026",
   nameVi: "Giải Pickleball Đôi Nam VTNet 2026",
-  groups: {
-    1: [
-      { id: "1-1", name: "Ngô Đại Dương / Hà Trọng Trường", p1: "Ngô Đại Dương", p2: "Hà Trọng Trường" },
-      { id: "1-2", name: "Lê Văn Bình / Hoàng Xuân Hưng", p1: "Lê Văn Bình", p2: "Hoàng Xuân Hưng" },
-      { id: "1-3", name: "Bùi Mạnh Linh / Dương Minh Thành", p1: "Bùi Mạnh Linh", p2: "Dương Minh Thành" },
-      { id: "1-4", name: "Vũ Đình Thành / Nguyễn Văn Công", p1: "Vũ Đình Thành", p2: "Nguyễn Văn Công" }
-    ],
-    2: [
-      { id: "2-1", name: "Phạm Ngọc Nhật Linh / Nguyễn Quang Long", p1: "Phạm Ngọc Nhật Linh", p2: "Nguyễn Quang Long" },
-      { id: "2-2", name: "Nguyễn Tiến Đạt / Đặng Thái Sơn", p1: "Nguyễn Tiến Đạt", p2: "Đặng Thái Sơn" },
-      { id: "2-3", name: "Trần Quang Minh / Nguyễn Minh Thuần", p1: "Trần Quang Minh", p2: "Nguyễn Minh Thuần" },
-      { id: "2-4", name: "Đinh Thế Sơn / Nguyễn Công Định", p1: "Đinh Thế Sơn", p2: "Nguyễn Công Định" }
-    ],
-    3: [
-      { id: "3-1", name: "Hồ Anh Dũng / Bùi Đức Lâm", p1: "Hồ Anh Dũng", p2: "Bùi Đức Lâm" },
-      { id: "3-2", name: "Dương Đức Thành / Đặng Việt Hải", p1: "Dương Đức Thành", p2: "Đặng Việt Hải" },
-      { id: "3-3", name: "Nguyễn Tuấn Dũng / Nguyễn Nhân Long", p1: "Nguyễn Tuấn Dũng", p2: "Nguyễn Nhân Long" },
-      { id: "3-4", name: "Phạm Ngọc Thắng / Bùi Doãn Hải", p1: "Phạm Ngọc Thắng", p2: "Bùi Doãn Hải" }
-    ],
-    4: [
-      { id: "4-1", name: "Bùi Văn Họa / Hoàng Công Tú", p1: "Bùi Văn Họa", p2: "Hoàng Công Tú" },
-      { id: "4-2", name: "Phạm Tuấn Dương / Trần Minh Tiến", p1: "Phạm Tuấn Dương", p2: "Trần Minh Tiến" },
-      { id: "4-3", name: "Nguyễn Tuấn Anh / Nghiêm Chu Hiếu", p1: "Nguyễn Tuấn Anh", p2: "Nghiêm Chu Hiếu" },
-      { id: "4-4", name: "Nguyễn Khắc Phi / Đặng Đình Tài", p1: "Nguyễn Khắc Phi", p2: "Đặng Đình Tài" }
-    ],
-    5: [
-      { id: "5-1", name: "Đặng Hoài Sơn / Trần Văn Luận", p1: "Đặng Hoài Sơn", p2: "Trần Văn Luận" },
-      { id: "5-2", name: "An Văn Hưởng / Vũ Công Mạnh", p1: "An Văn Hưởng", p2: "Vũ Công Mạnh" },
-      { id: "5-3", name: "Đào Đại Nghĩa / Lê Ngọc Nam", p1: "Đào Đại Nghĩa", p2: "Lê Ngọc Nam" },
-      { id: "5-4", name: "Nguyễn Khải Hoàn / Vũ Viết Cường", p1: "Nguyễn Khải Hoàn", p2: "Vũ Viết Cường" }
-    ],
-    6: [
-      { id: "6-1", name: "Trần Anh Dũng / Nguyễn Hồng Lĩnh", p1: "Trần Anh Dũng", p2: "Nguyễn Hồng Lĩnh" },
-      { id: "6-2", name: "Nguyễn Tuấn Tú / Nguyễn Văn Hạnh", p1: "Nguyễn Tuấn Tú", p2: "Nguyễn Văn Hạnh" },
-      { id: "6-3", name: "Đỗ Quang Huy / Nguyễn Văn Thạch", p1: "Đỗ Quang Huy", p2: "Nguyễn Văn Thạch" },
-      { id: "6-4", name: "Trần Tuấn Trung / Ngô Hùng Cường", p1: "Trần Tuấn Trung", p2: "Ngô Hùng Cường" }
-    ]
-  }
+  groups: DEFAULT_TEAMS
 };
 
 // KO group labels: group 1→A, 2→B, etc.

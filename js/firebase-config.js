@@ -38,6 +38,15 @@ function initFirebase() {
   }
 }
 
+// Write teams to Firebase
+function saveTeams(teamsData) {
+  if (!FIREBASE_READY) return Promise.reject("Firebase chưa cấu hình");
+  return firebaseDb.ref('teams').set(teamsData).catch(error => {
+    console.error("Error saving teams:", error);
+    throw error;
+  });
+}
+
 // Read scores from Firebase
 function listenScores(callback) {
   if (!FIREBASE_READY) {
@@ -45,14 +54,27 @@ function listenScores(callback) {
     callback(getDemoScores());
     return;
   }
-  console.log("Listening to Firebase scores...");
   firebaseDb.ref('scores').on('value', (snapshot) => {
-    console.log("Firebase data received:", snapshot.val());
     const data = snapshot.val() || {};
     callback(data);
   }, (error) => {
-    console.error("Firebase read error:", error.message);
+    console.error("Firebase read scores error:", error.message);
     callback(getDemoScores());
+  });
+}
+
+// Read teams from Firebase
+function listenTeams(callback) {
+  if (!FIREBASE_READY) {
+    console.warn("Firebase not ready for teams");
+    callback(null);
+    return;
+  }
+  firebaseDb.ref('teams').on('value', (snapshot) => {
+    callback(snapshot.val());
+  }, (error) => {
+    console.error("Firebase read teams error:", error.message);
+    callback(null);
   });
 }
 
