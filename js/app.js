@@ -8,12 +8,19 @@ let scoresLoaded = false;
 document.addEventListener('DOMContentLoaded', () => {
   initFirebase();
   setupMainTabs();
-  
+  setupCategoryTabs();
+  loadDataForCurrentCategory();
+});
+
+function loadDataForCurrentCategory() {
+  teamsLoaded = false;
+  scoresLoaded = false;
+
   listenTeams(teams => {
     if (teams) {
       TOURNAMENT.groups = teams;
     } else {
-      TOURNAMENT.groups = DEFAULT_TEAMS;
+      TOURNAMENT.groups = CURRENT_CATEGORY === 'doi_nam' ? DEFAULT_TEAMS : {};
     }
     teamsLoaded = true;
     if (scoresLoaded) renderAll();
@@ -28,7 +35,24 @@ document.addEventListener('DOMContentLoaded', () => {
     scoresLoaded = true;
     if (teamsLoaded) renderAll();
   });
-});
+}
+
+function setupCategoryTabs() {
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (CURRENT_CATEGORY === tab.dataset.cat) return;
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      CURRENT_CATEGORY = tab.dataset.cat;
+      
+      const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
+      const subtitleEl = document.querySelector('.hero__subtitle');
+      if (subtitleEl) subtitleEl.textContent = `Giải Pickleball ${config.name} 2026`;
+      
+      loadDataForCurrentCategory();
+    });
+  });
+}
 
 function setupMainTabs() {
   document.querySelectorAll('.main-tab').forEach(tab => {

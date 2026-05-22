@@ -6,54 +6,80 @@ function renderKnockoutStage(scores) {
   const container = document.getElementById('knockout-stage-content');
   if (!container) return;
 
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   const result = determineKnockoutTeams(scores);
   const bracket = buildKnockoutBracket(result.koGroups);
 
-  // Build full bracket with winners
-  const r16 = bracket.round16.map((m, i) => ({
-    ...m, key: '' + i,
-    winner: getMatchWinner('' + i, m.t1, m.t2, scores, 'ko')
-  }));
+  let r16 = [], qf = [], sf = [], finalMatch = null;
 
-  const qf = [
-    { label: 'Trận 9',  t1: r16[0].winner, t2: r16[4].winner, key: '0' },
-    { label: 'Trận 10', t1: r16[1].winner, t2: r16[5].winner, key: '1' },
-    { label: 'Trận 11', t1: r16[2].winner, t2: r16[6].winner, key: '2' },
-    { label: 'Trận 12', t1: r16[3].winner, t2: r16[7].winner, key: '3' }
-  ].map(m => ({ ...m, winner: getMatchWinner(m.key, m.t1, m.t2, scores, 'qf') }));
+  if (config.knockoutStart === 'ko') {
+    r16 = bracket.round16.map((m, i) => ({
+      ...m, key: '' + i, winner: getMatchWinner('' + i, m.t1, m.t2, scores, 'ko')
+    }));
+    qf = [
+      { label: 'Trận 9',  t1: r16[0].winner, t2: r16[4].winner, key: '0' },
+      { label: 'Trận 10', t1: r16[1].winner, t2: r16[5].winner, key: '1' },
+      { label: 'Trận 11', t1: r16[2].winner, t2: r16[6].winner, key: '2' },
+      { label: 'Trận 12', t1: r16[3].winner, t2: r16[7].winner, key: '3' }
+    ].map(m => ({ ...m, winner: getMatchWinner(m.key, m.t1, m.t2, scores, 'qf') }));
+    sf = [
+      { label: 'Trận 13', t1: qf[0].winner, t2: qf[2].winner, key: '0' },
+      { label: 'Trận 14', t1: qf[1].winner, t2: qf[3].winner, key: '1' }
+    ].map(m => ({ ...m, winner: getMatchWinner(m.key, m.t1, m.t2, scores, 'sf') }));
+  } else if (config.knockoutStart === 'qf') {
+    qf = bracket.qfBase.map((m, i) => ({
+      ...m, key: '' + i, winner: getMatchWinner('' + i, m.t1, m.t2, scores, 'qf')
+    }));
+    sf = [
+      { label: 'Bán Kết 1', t1: qf[0].winner, t2: qf[2].winner, key: '0' },
+      { label: 'Bán Kết 2', t1: qf[1].winner, t2: qf[3].winner, key: '1' }
+    ].map(m => ({ ...m, winner: getMatchWinner(m.key, m.t1, m.t2, scores, 'sf') }));
+  } else if (config.knockoutStart === 'sf') {
+    sf = bracket.sfBase.map((m, i) => ({
+      ...m, key: '' + i, winner: getMatchWinner('' + i, m.t1, m.t2, scores, 'sf')
+    }));
+  }
 
-  const sf = [
-    { label: 'Trận 13', t1: qf[0].winner, t2: qf[2].winner, key: '0' },
-    { label: 'Trận 14', t1: qf[1].winner, t2: qf[3].winner, key: '1' }
-  ].map(m => ({ ...m, winner: getMatchWinner(m.key, m.t1, m.t2, scores, 'sf') }));
-
-  const finalMatch = {
-    label: 'Trận 15 - Chung Kết / Final', t1: sf[0].winner, t2: sf[1].winner, key: 'final'
+  finalMatch = {
+    label: 'Chung Kết / Final', t1: sf[0].winner, t2: sf[1].winner, key: 'final'
   };
   finalMatch.winner = getMatchWinner('final', finalMatch.t1, finalMatch.t2, scores, 'final');
 
   // Render tabs + content
-  let html = renderKoTabs();
-  // Qualified section lives inside the 1/16 tab so the layout is clean
-  const r16Content = renderKoRound(r16, scores, 'ko', 'round16') + renderQualifiedSection(result);
-  html += '<div id="ko-round16" class="ko-round-content">' + r16Content + '</div>';
-  html += '<div id="ko-qf" class="ko-round-content" style="display:none">' + renderKoRound(qf, scores, 'qf', 'qf') + '</div>';
-  html += '<div id="ko-sf" class="ko-round-content" style="display:none">' + renderKoRound(sf, scores, 'sf', 'sf') + '</div>';
+  let html = renderKoTabs(config);
+  
+  if (config.knockoutStart === 'ko') {
+    const r16Content = renderKoRound(r16, scores, 'ko', 'round16') + renderQualifiedSection(result, config);
+    html += '<div id="ko-round16" class="ko-round-content">' + r16Content + '</div>';
+  }
+  
+  if (['ko', 'qf'].includes(config.knockoutStart)) {
+    const qfContent = renderKoRound(qf, scores, 'qf', 'qf') + (config.knockoutStart === 'qf' ? renderQualifiedSection(result, config) : '');
+    html += '<div id="ko-qf" class="ko-round-content" style="display:none">' + qfContent + '</div>';
+  }
+
+  const sfContent = renderKoRound(sf, scores, 'sf', 'sf') + (config.knockoutStart === 'sf' ? renderQualifiedSection(result, config) : '');
+  html += '<div id="ko-sf" class="ko-round-content" style="display:none">' + sfContent + '</div>';
   html += '<div id="ko-final" class="ko-round-content" style="display:none">' + renderKoFinal(finalMatch, scores) + '</div>';
 
   container.innerHTML = html;
+  
+  if (config.knockoutStart === 'sf' && ['round16', 'qf'].includes(currentKoTab)) currentKoTab = 'sf';
+  if (config.knockoutStart === 'qf' && currentKoTab === 'round16') currentKoTab = 'qf';
+  if (!document.getElementById('ko-' + currentKoTab)) currentKoTab = config.knockoutStart === 'ko' ? 'round16' : config.knockoutStart;
+  
   setActiveKoTab(currentKoTab);
   attachKoTabEvents();
 }
 
-function renderKoTabs() {
-  return `
-    <div class="ko-tabs">
-      <button class="ko-tab active" data-tab="round16">1/16</button>
-      <button class="ko-tab" data-tab="qf">Tứ Kết</button>
-      <button class="ko-tab" data-tab="sf">Bán Kết</button>
-      <button class="ko-tab" data-tab="final">Chung Kết</button>
-    </div>`;
+function renderKoTabs(config) {
+  let html = '<div class="ko-tabs">';
+  if (config.knockoutStart === 'ko') html += '<button class="ko-tab" data-tab="round16">1/16</button>';
+  if (['ko', 'qf'].includes(config.knockoutStart)) html += '<button class="ko-tab" data-tab="qf">Tứ Kết</button>';
+  html += '<button class="ko-tab" data-tab="sf">Bán Kết</button>';
+  html += '<button class="ko-tab" data-tab="final">Chung Kết</button>';
+  html += '</div>';
+  return html;
 }
 
 function attachKoTabEvents() {
@@ -135,31 +161,33 @@ function renderKoFinal(match, scores) {
   return html;
 }
 
-function renderQualifiedSection(result) {
+function renderQualifiedSection(result, config) {
   const { koGroups } = result;
+  const numTeams = config.knockoutStart === 'ko' ? 16 : (config.knockoutStart === 'qf' ? 8 : 4);
   let html = `
     <div class="qualified-section">
-      <h3 class="qualified-title">🎯 16 Đội Vào Vòng Knock-out / Qualified Teams</h3>
+      <h3 class="qualified-title">🎯 ${numTeams} Đội Vào Vòng Knock-out / Qualified Teams</h3>
       <div class="qualified-grid">`;
 
-  ['A', 'B', 'C', 'D', 'E', 'F'].forEach(label => {
+  const groupLabels = config.advanceRule === 'top3' ? ['A', 'B', 'C', 'D', 'E', 'F'] : Object.keys(koGroups);
+  groupLabels.forEach(label => {
     const g = koGroups[label];
     if (!g) return;
-    const groupInfo = g.origGroup ? ` (Bảng ${g.origGroup})` : '';
+    const groupInfo = g.origGroup ? ` (Bảng ${g.origGroup})` : ` (Bảng ${label})`;
 
     if (g.first) {
       html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">KO ${label} - #1${groupInfo}</span>
+        <span class="qualified-badge badge-direct">#1${groupInfo}</span>
         <span>${g.first.team.name}</span></div>`;
     }
     if (g.second) {
       html += `<div class="qualified-item direct">
-        <span class="qualified-badge badge-direct">KO ${label} - #2${groupInfo}</span>
+        <span class="qualified-badge badge-direct">#2${groupInfo}</span>
         <span>${g.second.team.name}</span></div>`;
     }
     if (g.third) {
       html += `<div class="qualified-item wildcard">
-        <span class="qualified-badge badge-wildcard">KO ${label} - Top 3${groupInfo}</span>
+        <span class="qualified-badge badge-wildcard">Top 3${groupInfo}</span>
         <span>${g.third.team.name}</span></div>`;
     }
   });

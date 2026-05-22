@@ -5,7 +5,8 @@ function renderGroupStage(scores) {
   if (!container) return;
 
   let html = '<div class="groups-grid">';
-  for (let g = 1; g <= 6; g++) {
+  const maxGroups = CATEGORIES_CONFIG[CURRENT_CATEGORY].groupsCount;
+  for (let g = 1; g <= maxGroups; g++) {
     html += renderGroupCard(g, scores);
   }
   html += '</div>';
@@ -63,7 +64,13 @@ function renderStandingsTable(standings, groupNum) {
 
   standings.forEach((s, idx) => {
     const rank = idx + 1;
-    const rowClass = rank <= 2 ? 'qualified' : rank === 3 ? 'wildcard' : '';
+    const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
+    let rowClass = '';
+    if (config.advanceRule === 'top3') {
+      rowClass = rank <= 2 ? 'qualified' : rank === 3 ? 'wildcard' : '';
+    } else if (config.advanceRule === 'top2') {
+      rowClass = rank <= 2 ? 'qualified' : '';
+    }
     const diff = s.sf - s.sa;
     const diffStr = diff > 0 ? '+' + diff : diff.toString();
 

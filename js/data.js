@@ -39,6 +39,32 @@ const DEFAULT_TEAMS = {
   ]
 };
 
+const CATEGORIES_CONFIG = {
+  'doi_nam': {
+    id: 'doi_nam',
+    name: 'Đôi Nam',
+    groupsCount: 6,
+    advanceRule: 'top3', // Nhất nhì + vé vớt
+    knockoutStart: 'ko' // 1/16
+  },
+  'doi_nu': {
+    id: 'doi_nu',
+    name: 'Đôi Nữ',
+    groupsCount: 2,
+    advanceRule: 'top2', // Nhất nhì
+    knockoutStart: 'sf' // Bán kết
+  },
+  'nam_nu': {
+    id: 'nam_nu',
+    name: 'Đôi Nam Nữ',
+    groupsCount: 4,
+    advanceRule: 'top2', // Nhất nhì
+    knockoutStart: 'qf' // Tứ kết
+  }
+};
+
+let CURRENT_CATEGORY = 'doi_nam';
+
 let TOURNAMENT = {
   name: "VTNet Pickleball Championship 2026",
   nameVi: "Giải Pickleball Đôi Nam VTNet 2026",
@@ -89,57 +115,66 @@ function calcStandings(groupNum, scores) {
 
 // Determine 16 teams for knockout
 function determineKnockoutTeams(scores) {
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   const allStandings = {};
   const direct = [];
-  const potentialWC = []; // Only rank 3 from each group
+  const potentialWC = [];
 
-  for (let g = 1; g <= 6; g++) {
+  for (let g = 1; g <= config.groupsCount; g++) {
     const st = calcStandings(g, scores);
     allStandings[g] = st;
     if (st[0]) direct.push({ ...st[0], fromGroup: g, koRank: 1 });
     if (st[1]) direct.push({ ...st[1], fromGroup: g, koRank: 2 });
-    if (st[2]) potentialWC.push({ ...st[2], fromGroup: g });
-  }
-
-  // Pick best 4 rank-3 teams as wildcards
-  potentialWC.sort((a, b) => b.pts - a.pts || (b.sf - b.sa) - (a.sf - a.sa) || b.sf - a.sf);
-  const wildcards = potentialWC.slice(0, 4).map(t => ({ ...t, koRank: 3 }));
-
-  // Groups with wildcard (3 qualifiers) → sorted ascending → KO A,B,C,D
-  // Groups without wildcard (2 qualifiers) → sorted ascending → KO E,F
-  const wcGroupNums = wildcards.map(w => w.fromGroup).sort((a, b) => a - b);
-  const nonWcGroupNums = [];
-  for (let g = 1; g <= 6; g++) {
-    if (!wcGroupNums.includes(g)) nonWcGroupNums.push(g);
+    if (config.advanceRule === 'top3' && st[2]) potentialWC.push({ ...st[2], fromGroup: g });
   }
 
   const koGroups = {};
-  ['A', 'B', 'C', 'D'].forEach((label, i) => {
-    const g = wcGroupNums[i];
-    if (!g) return;
-    koGroups[label] = {
-      first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
-      second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
-      third: wildcards.find(w => w.fromGroup === g) || null,
-      origGroup: g
-    };
-  });
-  ['E', 'F'].forEach((label, i) => {
-    const g = nonWcGroupNums[i];
-    if (!g) return;
-    koGroups[label] = {
-      first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
-      second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
-      third: null,
-      origGroup: g
-    };
-  });
-
-  return { allStandings, direct, wildcards, koGroups, wcGroupNums, nonWcGroupNums };
+  
+  if (config.advanceRule === 'top3') {
+    potentialWC.sort((a, b) => b.pts - a.pts || (b.sf - b.sa) - (a.sf - a.sa) || b.sf - a.sf);
+    const wildcards = potentialWC.slice(0, 4).map(t => ({ ...t, koRank: 3 }));
+    const wcGroupNums = wildcards.map(w => w.fromGroup).sort((a, b) => a - b);
+    const nonWcGroupNums = [];
+    for (let g = 1; g <= 6; g++) {
+      if (!wcGroupNums.includes(g)) nonWcGroupNums.push(g);
+    }
+    ['A', 'B', 'C', 'D'].forEach((label, i) => {
+      const g = wcGroupNums[i];
+      if (!g) return;
+      koGroups[label] = {
+        first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
+        second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
+        third: wildcards.find(w => w.fromGroup === g) || null,
+        origGroup: g
+      };
+    });
+    ['E', 'F'].forEach((label, i) => {
+      const g = nonWcGroupNums[i];
+      if (!g) return;
+      koGroups[label] = {
+        first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
+        second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
+        third: null,
+        origGroup: g
+      };
+    });
+    return { allStandings, direct, wildcards, koGroups, wcGroupNums, nonWcGroupNums };
+  } else {
+    // top2 rule for 2 or 4 groups
+    for (let g = 1; g <= config.groupsCount; g++) {
+      koGroups[g] = {
+        first: direct.find(d => d.fromGroup === g && d.koRank === 1) || null,
+        second: direct.find(d => d.fromGroup === g && d.koRank === 2) || null,
+        origGroup: g
+      };
+    }
+    return { allStandings, direct, wildcards: [], koGroups };
+  }
 }
 
 // Build knockout bracket matchups
 function buildKnockoutBracket(koGroups) {
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   const t = (group, rank) => {
     const g = koGroups[group];
     if (!g) return null;
@@ -149,18 +184,36 @@ function buildKnockoutBracket(koGroups) {
     return null;
   };
 
-  return {
-    round16: [
-      { label: 'Trận 1', t1: t('A', 1), t2: t('B', 3) },
-      { label: 'Trận 2', t1: t('B', 1), t2: t('A', 3) },
-      { label: 'Trận 3', t1: t('A', 2), t2: t('B', 2) },
-      { label: 'Trận 4', t1: t('E', 1), t2: t('F', 2) },
-      { label: 'Trận 5', t1: t('C', 1), t2: t('D', 3) },
-      { label: 'Trận 6', t1: t('D', 1), t2: t('C', 3) },
-      { label: 'Trận 7', t1: t('C', 2), t2: t('D', 2) },
-      { label: 'Trận 8', t1: t('F', 1), t2: t('E', 2) }
-    ]
-  };
+  if (config.knockoutStart === 'ko') {
+    return {
+      round16: [
+        { label: 'Trận 1', t1: t('A', 1), t2: t('B', 3) },
+        { label: 'Trận 2', t1: t('B', 1), t2: t('A', 3) },
+        { label: 'Trận 3', t1: t('A', 2), t2: t('B', 2) },
+        { label: 'Trận 4', t1: t('E', 1), t2: t('F', 2) },
+        { label: 'Trận 5', t1: t('C', 1), t2: t('D', 3) },
+        { label: 'Trận 6', t1: t('D', 1), t2: t('C', 3) },
+        { label: 'Trận 7', t1: t('C', 2), t2: t('D', 2) },
+        { label: 'Trận 8', t1: t('F', 1), t2: t('E', 2) }
+      ]
+    };
+  } else if (config.knockoutStart === 'qf') {
+    return {
+      qfBase: [
+        { label: 'Tứ Kết 1', t1: t(1, 1), t2: t(2, 2) },
+        { label: 'Tứ Kết 2', t1: t(3, 1), t2: t(4, 2) },
+        { label: 'Tứ Kết 3', t1: t(2, 1), t2: t(1, 2) },
+        { label: 'Tứ Kết 4', t1: t(4, 1), t2: t(3, 2) }
+      ]
+    };
+  } else if (config.knockoutStart === 'sf') {
+    return {
+      sfBase: [
+        { label: 'Bán Kết 1', t1: t(1, 1), t2: t(2, 2) },
+        { label: 'Bán Kết 2', t1: t(2, 1), t2: t(1, 2) }
+      ]
+    };
+  }
 }
 
 // Get winner of a knockout match

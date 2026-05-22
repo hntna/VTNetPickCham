@@ -38,10 +38,16 @@ function initFirebase() {
   }
 }
 
+// Tracking listeners
+let _scoresRef = null;
+let _teamsRef = null;
+let _scoresCallback = null;
+let _teamsCallback = null;
+
 // Write teams to Firebase
 function saveTeams(teamsData) {
   if (!FIREBASE_READY) return Promise.reject("Firebase chưa cấu hình");
-  return firebaseDb.ref('teams').set(teamsData).catch(error => {
+  return firebaseDb.ref(CURRENT_CATEGORY + '/teams').set(teamsData).catch(error => {
     console.error("Error saving teams:", error);
     throw error;
   });
@@ -49,39 +55,53 @@ function saveTeams(teamsData) {
 
 // Read scores from Firebase
 function listenScores(callback) {
+  if (callback) _scoresCallback = callback;
+  if (!_scoresCallback) return;
+
   if (!FIREBASE_READY) {
     console.warn("Firebase not ready, using demo scores");
-    callback(getDemoScores());
+    _scoresCallback(getDemoScores());
     return;
   }
-  firebaseDb.ref('scores').on('value', (snapshot) => {
+  
+  if (_scoresRef) _scoresRef.off('value');
+  _scoresRef = firebaseDb.ref(CURRENT_CATEGORY + '/scores');
+  
+  _scoresRef.on('value', (snapshot) => {
     const data = snapshot.val() || {};
-    callback(data);
+    _scoresCallback(data);
   }, (error) => {
     console.error("Firebase read scores error:", error.message);
-    callback(getDemoScores());
+    _scoresCallback(getDemoScores());
   });
 }
 
 // Read teams from Firebase
 function listenTeams(callback) {
+  if (callback) _teamsCallback = callback;
+  if (!_teamsCallback) return;
+
   if (!FIREBASE_READY) {
     console.warn("Firebase not ready for teams");
-    callback(null);
+    _teamsCallback(null);
     return;
   }
-  firebaseDb.ref('teams').on('value', (snapshot) => {
-    callback(snapshot.val());
+  
+  if (_teamsRef) _teamsRef.off('value');
+  _teamsRef = firebaseDb.ref(CURRENT_CATEGORY + '/teams');
+  
+  _teamsRef.on('value', (snapshot) => {
+    _teamsCallback(snapshot.val());
   }, (error) => {
     console.error("Firebase read teams error:", error.message);
-    callback(null);
+    _teamsCallback(null);
   });
 }
 
 // Write score to Firebase
 function saveScore(stage, matchKey, s1, s2) {
   if (!FIREBASE_READY) return Promise.reject("Firebase not ready");
-  const path = stage === 'final' ? 'scores/final' : 'scores/' + stage + '/' + matchKey;
+  const path = stage === 'final' ? CURRENT_CATEGORY + '/scores/final' : CURRENT_CATEGORY + '/scores/' + stage + '/' + matchKey;
   return firebaseDb.ref(path).set({ s1: s1, s2: s2 });
 }
 

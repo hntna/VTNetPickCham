@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('logout-btn').addEventListener('click', () => firebaseAuth.signOut());
   document.getElementById('round-select').addEventListener('change', renderRoundMatches);
+  
+  const categorySelect = document.getElementById('admin-category-select');
+  if (categorySelect) {
+    categorySelect.addEventListener('change', (e) => {
+      CURRENT_CATEGORY = e.target.value;
+      populateRoundSelect();
+      loadAdminData();
+    });
+  }
 
   if (FIREBASE_READY && firebaseAuth) {
     firebaseAuth.onAuthStateChanged(user => {
@@ -38,8 +47,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  loadAdminData();
+});
+
+function loadAdminData() {
+  teamsLoaded = false;
+  scoresLoaded = false;
+
   listenTeams(teams => {
-    adminTeams = teams || JSON.parse(JSON.stringify(DEFAULT_TEAMS));
+    adminTeams = teams || (CURRENT_CATEGORY === 'doi_nam' ? JSON.parse(JSON.stringify(DEFAULT_TEAMS)) : {});
     TOURNAMENT.groups = adminTeams;
     teamsLoaded = true;
     if (scoresLoaded) {
@@ -60,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
       renderTeamsManager();
     }
   });
-});
+}
 
 function setupAdminTabs() {
   document.querySelectorAll('.admin-tab').forEach(tab => {
@@ -75,9 +91,11 @@ function setupAdminTabs() {
 
 function populateRoundSelect() {
   const sel = document.getElementById('round-select');
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   sel.innerHTML = '<option value="">-- Chọn vòng đấu / Select Round --</option>';
-  sel.innerHTML += `<option value="all-groups">🏅 Vòng Bảng (Tất cả 6 bảng)</option>`;
-  sel.innerHTML += '<option value="ko">🔥 Vòng 1/16</option><option value="qf">🏆 Tứ Kết / Quarter Finals</option>';
+  sel.innerHTML += `<option value="all-groups">🏅 Vòng Bảng (Tất cả ${config.groupsCount} bảng)</option>`;
+  if (config.knockoutStart === 'ko') sel.innerHTML += '<option value="ko">🔥 Vòng 1/16</option>';
+  if (['ko', 'qf'].includes(config.knockoutStart)) sel.innerHTML += '<option value="qf">🏆 Tứ Kết / Quarter Finals</option>';
   sel.innerHTML += '<option value="sf">🏅 Bán Kết / Semi Finals</option><option value="final">🏆 Chung Kết / Final</option>';
 }
 
@@ -89,7 +107,7 @@ function renderRoundMatches() {
   let html = '';
 
   if (roundVal === 'all-groups') {
-    for (let g = 1; g <= 6; g++) {
+    for (let g = 1; g <= CATEGORIES_CONFIG[CURRENT_CATEGORY].groupsCount; g++) {
       const teams = TOURNAMENT.groups[g];
       const matches = generateGroupMatches(teams);
       html += `<div style="background:var(--gray-50); padding:16px; margin-bottom:24px; border-radius:12px; border:1px solid #ddd;">`;
@@ -207,7 +225,8 @@ function renderTeamsManager() {
   if (!container || !adminTeams) return;
   
   let html = '';
-  for (let g = 1; g <= 6; g++) {
+  const maxGroups = CATEGORIES_CONFIG[CURRENT_CATEGORY].groupsCount;
+  for (let g = 1; g <= maxGroups; g++) {
     const teams = adminTeams[g] || [];
     html += `
       <div style="background:var(--gray-50); padding:16px; margin-bottom:16px; border-radius:12px; border:1px solid #ddd;">
@@ -302,7 +321,7 @@ function importExcelTeams() {
         const bangMatch = String(bang).match(/\d+/);
         if (!bangMatch) continue;
         const g = parseInt(bangMatch[0]);
-        if (g < 1 || g > 6) continue;
+        if (g < 1 || g > CATEGORIES_CONFIG[CURRENT_CATEGORY].groupsCount) continue;
         
         if (!newTeams[g]) newTeams[g] = [];
         
@@ -337,7 +356,8 @@ function importExcelTeams() {
 
 function saveAllTeams() {
   // Validate empty teams
-  for (let g = 1; g <= 6; g++) {
+  const maxGroups = CATEGORIES_CONFIG[CURRENT_CATEGORY].groupsCount;
+  for (let g = 1; g <= maxGroups; g++) {
     if (adminTeams[g]) {
       adminTeams[g] = adminTeams[g].filter(t => t.name.trim() !== '');
       // Reassign IDs based on index

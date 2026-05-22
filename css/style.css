@@ -859,7 +859,42 @@ h1,h2,h3,h4,h5,h6{font-family:'Be Vietnam Pro','Trebuchet MS',sans-serif;line-he
 .badge-direct   { background: var(--green-light); color: #065F46; }
 .badge-wildcard { background: var(--gold-light);  color: #92400E; }
 
-/* ============ ANIMATIONS ============ */
+/* ============ CATEGORY TABS ============ */
+.category-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 16px 8px;
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-wrap: wrap;
+}
+.cat-tab {
+  padding: 8px 20px;
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-600);
+  border-radius: 30px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.cat-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.cat-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--white);
+}
+
+/* ============ MAIN NAVIGATION ============ */
 @keyframes scorePulse {
   0%   { transform: scale(1); }
   50%  { transform: scale(1.18); }
