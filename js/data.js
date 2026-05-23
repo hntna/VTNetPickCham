@@ -122,7 +122,10 @@ function areAllGroupMatchesFinished(scores) {
       const matchKey = g + '-' + i;
       const sc = scores.group && scores.group[matchKey];
       if (!sc || sc.s1 == null || sc.s2 == null || sc.s1 === '' || sc.s2 === '') {
-        return false; // Found an unfinished match
+        return false;
+      }
+      if (parseInt(sc.s1) === 0 && parseInt(sc.s2) === 0) {
+        return false;
       }
     }
   }
