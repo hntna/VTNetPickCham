@@ -1,14 +1,31 @@
-# 🏓 VTNet Pickleball Championship 2026
+# 🏓 Summer Pickleball Championship
 
-Trang web hiển thị kết quả Giải Pickleball Đôi Nam VTNet 2026.
+Trang web hiển thị kết quả và cập nhật tỷ số Giải Pickleball Đôi Nam VTNet 2026.
 
 ## 🚀 Tính năng / Features
 
 - **Vòng Bảng**: 6 bảng round-robin, bảng xếp hạng real-time
 - **Vòng Knock-out**: 1/16 → Tứ kết → Bán kết → Chung kết
+- **Giao diện tối ưu (Mobile-first)**: Thiết kế chuẩn mobile, dễ nhìn, thao tác mượt mà
 - **Admin Panel**: Đăng nhập → Nhập tỷ số → Auto-sync
 - **Real-time**: Firebase Realtime Database, không cần refresh
-- **Responsive**: Tối ưu cho điện thoại
+
+## 📜 Thể thức thi đấu
+
+- **Vòng Bảng**: 6 bảng (A-F), mỗi bảng 4 đội (mỗi đội 2 người). Thi đấu vòng tròn, Thắng = 1 điểm, Thua = 0 điểm.
+- **Vòng 1/16**: Chọn 12 đội (Nhất/Nhì mỗi bảng) và 4 đội hạng 3 có điểm cao nhất. Phân cặp thi đấu loại trực tiếp.
+- **Vòng trong**: Thắng trận đi tiếp vào Tứ kết (1/8), Bán kết, Chung kết.
+
+## 🎨 Giao diện & Thiết kế
+
+- **Mobile First**: Ưu tiên hiển thị điện thoại (~375px), sử dụng thẻ meta viewport.
+- **Màu sắc**: Đỏ chủ đạo (`#EE0033`) kết hợp các mảng xám (`#F2F2F2`, `#B5B4B4`) và đen (`#44494D`).
+- **Typography**: 
+  - Headings: *PF BeauSans Pro* / *Trebuchet MS*
+  - Subheadings: *FS Magistral* / *Arial*
+  - Body: *Sarabun* / *Segoe UI*
+- **Layout Knockout**: Sơ đồ chia tab (Vòng 1/16, Tứ kết, Bán kết, Chung kết) để dễ dàng theo dõi từng vòng trên màn hình hẹp.
+- **Style**: Các element được bo góc (rounded cards/badges), tích hợp hiệu ứng chuyển động mượt mà (smooth animations) tạo cảm giác hiện đại.
 
 ## 📋 Hướng dẫn Setup Firebase
 

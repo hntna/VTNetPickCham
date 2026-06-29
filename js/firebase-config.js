@@ -1,4 +1,4 @@
-/* Firebase Configuration - VTNet Pickleball Championship 2026 */
+/* Firebase Configuration - Summer Pickleball Championship */
 
 // ========================================================
 // HƯỚNG DẪN: Thay thế config bên dưới bằng config từ

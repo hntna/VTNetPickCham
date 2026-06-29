@@ -1,4 +1,4 @@
-/* VTNet Pickleball Championship 2026 - Data & Config */
+/* Summer Pickleball Championship - Data & Config */
 
 const CATEGORIES_CONFIG = {
   'doi_nam': {
@@ -27,8 +27,8 @@ const CATEGORIES_CONFIG = {
 let CURRENT_CATEGORY = 'doi_nam';
 
 let TOURNAMENT = {
-  name: "VTNet Pickleball Championship 2026",
-  nameVi: "Giải Pickleball VTNet 2026",
+  name: "Summer Pickleball Championship",
+  nameVi: "Giải Pickleball CLB Vườn Cam- Quý2/2026",
   groups: {}
 };
 
