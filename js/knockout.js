@@ -19,7 +19,6 @@ function renderKnockoutStage(scores) {
     const finalMatch = buildFinalFromQfManual(sfMatches, scores);
 
     html += '<div id="ko-qf" class="ko-round-content">';
-    html += renderQualifiedSection(result, config);
     html += renderNamedRound(qfMatches, 'qf');
     html += '</div>';
 
@@ -46,7 +45,6 @@ function renderKnockoutStage(scores) {
     finalMatch.winner = getMatchWinner('final', finalMatch.t1, finalMatch.t2, scores, 'final');
 
     html += '<div id="ko-sf" class="ko-round-content">';
-    html += renderQualifiedSection(result, config);
     html += renderKoRound(sf, scores, 'sf', 'sf');
     html += '</div>';
 
@@ -55,17 +53,9 @@ function renderKnockoutStage(scores) {
     html += '</div>';
 
   } else if (config.knockoutStart === 'final') {
-    // nam_nu_a: Trực tiếp vào chung kết
-    const fd = bracket.finalDirect || {};
-    const finalMatch = {
-      label: 'Chung Kết', t1: fd.t1, t2: fd.t2, key: 'final'
-    };
-    finalMatch.winner = getMatchWinner('final', finalMatch.t1, finalMatch.t2, scores, 'final');
-
-    html += '<div id="ko-final" class="ko-round-content">';
-    html += renderQualifiedSection(result, config);
-    html += renderKoFinal(finalMatch, scores);
-    html += '</div>';
+    // nam_nu_a: kết quả hiện ở vòng bảng, không cần knockout tab
+    container.innerHTML = '';
+    return;
   }
 
   container.innerHTML = html;

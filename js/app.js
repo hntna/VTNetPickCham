@@ -16,6 +16,8 @@ function loadDataForCurrentCategory() {
   teamsLoaded = false;
   scoresLoaded = false;
 
+  updateKnockoutTabVisibility(); // ẩn/hiện tab Knock-out theo thể thức
+
   listenTeams(teams => {
     TOURNAMENT.groups = teams || {};
     teamsLoaded = true;
@@ -25,12 +27,34 @@ function loadDataForCurrentCategory() {
   listenScores(scores => {
     currentScores = scores || { group: {}, ko: {}, qf: {}, sf: {}, final: null };
     if (!currentScores.group) currentScores.group = {};
-    if (!currentScores.ko) currentScores.ko = {};
-    if (!currentScores.qf) currentScores.qf = {};
-    if (!currentScores.sf) currentScores.sf = {};
+    if (!currentScores.ko)    currentScores.ko    = {};
+    if (!currentScores.qf)    currentScores.qf    = {};
+    if (!currentScores.sf)    currentScores.sf    = {};
     scoresLoaded = true;
     if (teamsLoaded) renderAll();
   });
+}
+
+// Ẩn/hiện tab Knock-out dựa vào thể thức hiện tại
+function updateKnockoutTabVisibility() {
+  const config    = CATEGORIES_CONFIG[CURRENT_CATEGORY];
+  const koTab     = document.querySelector('.main-tab[data-tab="knockout"]');
+  const koSection = document.getElementById('knockout-section');
+  if (!koTab) return;
+
+  const isDirectFinal = config.knockoutStart === 'final'; // nam_nu_a
+
+  koTab.style.display = isDirectFinal ? 'none' : '';
+
+  // Nếu đang ở tab knockout mà chuyển sang thể thức không có knockout → về groups
+  if (isDirectFinal && currentMainTab === 'knockout') {
+    currentMainTab = 'groups';
+    document.querySelectorAll('.main-tab').forEach(t =>
+      t.classList.toggle('active', t.dataset.tab === 'groups')
+    );
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('groups-section')?.classList.add('active');
+  }
 }
 
 function setupCategoryTabs() {
@@ -40,8 +64,6 @@ function setupCategoryTabs() {
       document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       CURRENT_CATEGORY = tab.dataset.cat;
-      
-      
       loadDataForCurrentCategory();
     });
   });
@@ -61,5 +83,7 @@ function setupMainTabs() {
 
 function renderAll() {
   renderGroupStage(currentScores);
-  renderKnockoutStage(currentScores);
+  if (CATEGORIES_CONFIG[CURRENT_CATEGORY].knockoutStart !== 'final') {
+    renderKnockoutStage(currentScores);
+  }
 }
