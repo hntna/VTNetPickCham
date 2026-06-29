@@ -99,13 +99,13 @@ function buildSfFromQfManual(qfMatches, scores) {
   return [
     {
       label: 'Bán Kết 1', key: '0',
-      t1Name: w[0], t2Name: w[2],
+      t1Name: w[0], t2Name: w[1],
       s1: sfData['0'] ? sfData['0'].s1 : null,
       s2: sfData['0'] ? sfData['0'].s2 : null
     },
     {
       label: 'Bán Kết 2', key: '1',
-      t1Name: w[1], t2Name: w[3],
+      t1Name: w[2], t2Name: w[3],
       s1: sfData['1'] ? sfData['1'].s1 : null,
       s2: sfData['1'] ? sfData['1'].s2 : null
     }

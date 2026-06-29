@@ -204,8 +204,8 @@ function renderRoundMatches() {
       // Hiển thị tên đội từ QF winners
       const qfData = adminScores.qf || {};
       for (let i = 0; i < 2; i++) {
-        const qf1 = buildQfEntry(qfData['' + i]);
-        const qf2 = buildQfEntry(qfData['' + (i + 2)]);
+        const qf1 = buildQfEntry(qfData['' + (i * 2)]);
+        const qf2 = buildQfEntry(qfData['' + (i * 2 + 1)]);
         const t1n = getQfEntryWinner(qf1) || '?';
         const t2n = getQfEntryWinner(qf2) || '?';
         const sc = adminScores.sf ? adminScores.sf['' + i] : null;
