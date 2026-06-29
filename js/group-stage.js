@@ -16,18 +16,31 @@ function renderGroupStage(scores) {
   container.querySelectorAll('.matches-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('open');
-      const list = btn.nextElementSibling;
-      list.classList.toggle('open');
+      btn.nextElementSibling.classList.toggle('open');
     });
   });
 }
 
 function renderGroupCard(groupNum, scores) {
   const teams = TOURNAMENT.groups[groupNum];
+
+  // Chưa có đội
+  if (!teams || teams.length === 0) {
+    return `
+      <div class="group-card" id="group-${groupNum}">
+        <div class="group-card__header">
+          <h3 class="group-card__title">🎾 Bảng ${groupNum}</h3>
+        </div>
+        <div class="group-card__body">
+          <p style="text-align:center;color:var(--gray-500);padding:20px 0;">Chưa có dữ liệu đội</p>
+        </div>
+      </div>`;
+  }
+
   const matches = generateGroupMatches(teams);
   const standings = calcStandings(groupNum, scores);
 
-  let html = `
+  return `
     <div class="group-card" id="group-${groupNum}">
       <div class="group-card__header">
         <h3 class="group-card__title">🎾 Bảng ${groupNum}</h3>
@@ -43,10 +56,10 @@ function renderGroupCard(groupNum, scores) {
         </div>
       </div>
     </div>`;
-  return html;
 }
 
 function renderStandingsTable(standings, groupNum) {
+  const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
   let html = `
     <table class="standings">
       <thead>
@@ -64,9 +77,8 @@ function renderStandingsTable(standings, groupNum) {
 
   standings.forEach((s, idx) => {
     const rank = idx + 1;
-    const config = CATEGORIES_CONFIG[CURRENT_CATEGORY];
     let rowClass = '';
-    if (config.advanceRule === 'top3') {
+    if (config.advanceRule === 'top2wc2') {
       rowClass = rank <= 2 ? 'qualified' : rank === 3 ? 'wildcard' : '';
     } else if (config.advanceRule === 'top2') {
       rowClass = rank <= 2 ? 'qualified' : '';
@@ -97,14 +109,13 @@ function renderMatchList(matches, groupNum, scores) {
     const sc = scores.group ? scores.group[key] : null;
     const s1 = sc ? sc.s1 : null;
     const s2 = sc ? sc.s2 : null;
-    const hasScore = s1 != null && s2 != null && s1 !== '' && s2 !== '' && !(parseInt(s1) === 0 && parseInt(s2) === 0);
+    const hasScore = s1 != null && s2 != null && s1 !== '' && s2 !== ''
+      && !(parseInt(s1) === 0 && parseInt(s2) === 0);
 
     let scoreHtml;
     if (hasScore) {
       const n1 = parseInt(s1), n2 = parseInt(s2);
-      const w1 = n1 > n2 ? ' winner' : '';
-      const w2 = n2 > n1 ? ' winner' : '';
-      scoreHtml = `<span class="${w1}">${n1}</span><span class="vs">-</span><span class="${w2}">${n2}</span>`;
+      scoreHtml = `<span class="${n1 > n2 ? 'winner' : ''}">${n1}</span><span class="vs">-</span><span class="${n2 > n1 ? 'winner' : ''}">${n2}</span>`;
     } else {
       scoreHtml = '<span class="pending">-</span><span class="vs">vs</span><span class="pending">-</span>';
     }

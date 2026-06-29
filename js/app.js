@@ -17,11 +17,7 @@ function loadDataForCurrentCategory() {
   scoresLoaded = false;
 
   listenTeams(teams => {
-    if (teams) {
-      TOURNAMENT.groups = teams;
-    } else {
-      TOURNAMENT.groups = CURRENT_CATEGORY === 'doi_nam' ? DEFAULT_TEAMS : {};
-    }
+    TOURNAMENT.groups = teams || {};
     teamsLoaded = true;
     if (scoresLoaded) renderAll();
   });

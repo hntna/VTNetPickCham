@@ -144,9 +144,9 @@
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-weight: 600; color: var(--gray-600); font-size: 14px;">Quản lý Thể Thức:</span>
           <select id="admin-category-select" class="form-select" style="width: auto; padding-top: 6px; padding-bottom: 6px; font-size: 14px; font-weight: 700; color: var(--primary); border-color: var(--primary);">
-            <option value="doi_nam">Đôi Nam</option>
-            <option value="doi_nu">Đôi Nữ</option>
-            <option value="nam_nu">Đôi Nam Nữ</option>
+            <option value="doi_nam">Nam A</option>
+            <option value="nam_nu_a">Nam Nữ A</option>
+            <option value="nam_nu_b">Nam Nữ B</option>
           </select>
         </div>
       </div>
@@ -185,7 +185,10 @@
 
           <div id="teams-container"></div>
 
-          <button class="btn btn-primary" style="margin-top:20px" onclick="saveAllTeams()">💾 Lưu Tất Cả Đội Lên Server</button>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;">
+            <button class="btn btn-primary" onclick="saveAllTeams()">💾 Lưu Tất Cả Đội Lên Server</button>
+            <button class="btn" style="background:linear-gradient(135deg,#DC2626,#991B1B);color:#fff;" onclick="importAllTeamsFromExcel()">🗑️ Reset &amp; Import Giải Q2</button>
+          </div>
         </div>
       </div>
     </div>
@@ -202,11 +205,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <!-- App Scripts -->
-  <script src="js/data.js?v=20"></script>
-  <script src="js/firebase-config.js?v=17"></script>
-  <script src="js/group-stage.js?v=17"></script>
-  <script src="js/knockout.js?v=17"></script>
-  <script src="js/admin.js?v=17"></script>
+  <script src="js/data.js?v=30"></script>
+  <script src="js/firebase-config.js?v=30"></script>
+  <script src="js/group-stage.js?v=30"></script>
+  <script src="js/knockout.js?v=30"></script>
+  <script src="js/admin.js?v=30"></script>
 
 </body>
 </html>
