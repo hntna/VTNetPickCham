@@ -186,13 +186,16 @@ function renderRoundMatches() {
       html += `</div>`;
     }
 
-  } else if (roundVal === 'qf' && config.knockoutStart === 'qf_manual') {
+  } else if (roundVal === 'qf') {
     html += `<h3 style="text-align:center;margin-bottom:8px;color:var(--primary)">🏆 Tứ Kết · Admin cấu hình cặp đấu</h3>`;
     html += renderQualifiedTeamsForAdmin();
     html += `<p style="font-size:13px;color:var(--gray-500);margin-bottom:16px;text-align:center;">Nhập tên đội (theo kết quả bốc thăm) và tỷ số cho 4 trận tứ kết.</p>`;
+    
+    const qfTeams = getQualifiedTeamsList();
+    
     for (let i = 0; i < 4; i++) {
       const sc = adminScores.qf ? adminScores.qf['' + i] : null;
-      html += qfManualCard(i, sc);
+      html += qfManualCard(i, sc, qfTeams);
     }
 
   } else if (roundVal === 'sf') {
@@ -264,23 +267,60 @@ function renderQualifiedTeamsForAdmin() {
   return html;
 }
 
+function getQualifiedTeamsList() {
+  const result = determineKnockoutTeams(adminScores);
+  const { koGroups, wildcards } = result;
+  let teams = [];
+  if (koGroups) {
+    Object.values(koGroups).forEach(kg => {
+      if (kg.first) teams.push(kg.first.team.name);
+      if (kg.second) teams.push(kg.second.team.name);
+    });
+  }
+  if (wildcards) {
+    wildcards.forEach(wc => teams.push(wc.team.name));
+  }
+  return teams;
+}
+
 /* ---- QF Manual card ---- */
 
-function qfManualCard(idx, sc) {
+function qfManualCard(idx, sc, qfTeams) {
   const t1n = sc ? (sc.t1_name || '') : '';
   const t2n = sc ? (sc.t2_name || '') : '';
   const s1  = sc ? (sc.s1 != null ? sc.s1 : '') : '';
   const s2  = sc ? (sc.s2 != null ? sc.s2 : '') : '';
+
+  const renderOptions = (selected) => {
+    let opts = `<option value="">-- Chọn đội --</option>`;
+    if (qfTeams && qfTeams.length > 0) {
+      qfTeams.forEach(t => {
+        const isSel = (t === selected) ? 'selected' : '';
+        opts += `<option value="${t}" ${isSel}>${t}</option>`;
+      });
+      if (selected && !qfTeams.includes(selected)) {
+        opts += `<option value="${selected}" selected>${selected}</option>`;
+      }
+    } else {
+      if (selected) opts += `<option value="${selected}" selected>${selected}</option>`;
+    }
+    return opts;
+  };
+
   return `
     <div class="admin-match-card" data-stage="qf_manual" data-key="${idx}">
       <div class="admin-match-teams">
-        <input type="text" class="form-input team-name-1" value="${t1n}" placeholder="Tên đội 1 (bốc thăm)" style="font-size:12px;padding:6px 8px;margin-bottom:4px;">
+        <select class="form-input team-name-1" style="font-size:12px;padding:6px 8px;margin-bottom:4px;">
+          ${renderOptions(t1n)}
+        </select>
         <div class="admin-match-score-row">
           <input type="number" class="score-input score-s1" min="0" max="99" value="${s1}" placeholder="0">
           <span class="score-vs">-</span>
           <input type="number" class="score-input score-s2" min="0" max="99" value="${s2}" placeholder="0">
         </div>
-        <input type="text" class="form-input team-name-2" value="${t2n}" placeholder="Tên đội 2 (bốc thăm)" style="font-size:12px;padding:6px 8px;margin-top:4px;">
+        <select class="form-input team-name-2" style="font-size:12px;padding:6px 8px;margin-top:4px;">
+          ${renderOptions(t2n)}
+        </select>
       </div>
       <button class="btn-save-one" onclick="saveQfManualMatch(this)" title="Lưu trận TK${idx + 1}">💾</button>
     </div>`;
