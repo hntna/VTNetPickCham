@@ -152,7 +152,9 @@ function populateRoundSelect() {
     sel.innerHTML += `<option value="sf">🥈 Bán Kết</option>`;
   }
 
-  sel.innerHTML += `<option value="final">🏆 Chung Kết / Final</option>`;
+  if (config.knockoutStart !== 'none') {
+    sel.innerHTML += `<option value="final">🏆 Chung Kết / Final</option>`;
+  }
 }
 
 /* -------------------------------------------------- */

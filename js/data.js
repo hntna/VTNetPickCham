@@ -13,7 +13,7 @@ const CATEGORIES_CONFIG = {
     name: 'Nam Nữ A',
     groupsCount: 1,
     advanceRule: 'top2',
-    knockoutStart: 'final' // Nhất nhì vào thẳng chung kết
+    knockoutStart: 'none' // Không có knock-out, vòng bảng = kết quả cuối cùng
   },
   'nam_nu_b': {
     id: 'nam_nu_b',

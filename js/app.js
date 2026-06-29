@@ -42,12 +42,12 @@ function updateKnockoutTabVisibility() {
   const koSection = document.getElementById('knockout-section');
   if (!koTab) return;
 
-  const isDirectFinal = config.knockoutStart === 'final'; // nam_nu_a
+  const hasNoKnockout = config.knockoutStart === 'none'; // nam_nu_a
 
-  koTab.style.display = isDirectFinal ? 'none' : '';
+  koTab.style.display = hasNoKnockout ? 'none' : '';
 
   // Nếu đang ở tab knockout mà chuyển sang thể thức không có knockout → về groups
-  if (isDirectFinal && currentMainTab === 'knockout') {
+  if (hasNoKnockout && currentMainTab === 'knockout') {
     currentMainTab = 'groups';
     document.querySelectorAll('.main-tab').forEach(t =>
       t.classList.toggle('active', t.dataset.tab === 'groups')
@@ -83,7 +83,7 @@ function setupMainTabs() {
 
 function renderAll() {
   renderGroupStage(currentScores);
-  if (CATEGORIES_CONFIG[CURRENT_CATEGORY].knockoutStart !== 'final') {
+  if (CATEGORIES_CONFIG[CURRENT_CATEGORY].knockoutStart !== 'none') {
     renderKnockoutStage(currentScores);
   }
 }
